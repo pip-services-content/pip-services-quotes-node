@@ -1,0 +1,119 @@
+<project name="pip-services-quotes" default="build" basedir=".">
+    <description>
+        Build file for Quotes microservice from Pip.Services library
+    </description>
+        
+    <property name="root" location="."/>
+    <property name="bin" location="bin"/>
+    <property name="doc" location="doc"/>
+    <property name="config" location="config"/>
+    <property name="lib" location="lib"/>
+    <property name="node_modules" location="node_modules"/>
+    <property name="data" location="data"/>
+    <property name="logs" location="logs"/>
+    <property name="dist" location="dist"/>
+
+    <script language="javascript">
+        var File = java.io.File;
+        var FileReader = java.io.FileReader;
+        var BufferedReader = java.io.BufferedReader;
+
+        var file = new File("package.json");
+        fr = new FileReader(file);
+        br = new BufferedReader(fr);
+        
+        // Read the file. 
+        // This assumes the file has no line breaks and is one line.
+        var line = br.readLine();
+        var json = line;
+        while ((line = br.readLine()) != null) {
+            json += " " + line;
+        }  
+        
+        // Evaluate the JSON.
+        var pkg = eval("(" + json + ")");
+
+        // Set project properties
+        project.setProperty("name", pkg.name);
+        project.setProperty("version", pkg.version);
+        project.setProperty("release", pkg.name + "-" + pkg.version);
+    </script>
+
+    <target name="clean" description="Removing build and packaged artifacts">
+        <delete dir="${dist}/${release}"/>
+        <delete file="${dist}/${release}.zip"/>
+        <delete dir="${dist}/${name}-latest.zip"/>
+    </target>
+
+    <target name="show">
+        <echoproperties/>
+    </target>
+
+    <target name="copy-common" description="Copying files common to all distributions">
+        <!-- Create root folder -->   
+        <mkdir dir="${dist}/${release}"/>
+        
+        <!-- Copy bin folder -->
+        <copy todir="${dist}/${release}/bin">
+            <fileset dir="${bin}"/>
+        </copy>
+
+        <!-- Copy doc folder -->
+        <copy todir="${dist}/${release}">
+            <fileset dir="${root}">
+                <include name="*.md"/>
+                <include name="LICENSE"/>
+            </fileset>
+        </copy>
+        <copy todir="${dist}/${release}/doc">
+            <fileset dir="${doc}"/>
+        </copy>
+
+        <!-- Copy config folder -->
+        <copy todir="${dist}/${release}/config">
+            <fileset dir="${config}">
+                <exclude name="config.json"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy data folder -->
+        <mkdir dir="${dist}/${release}/data"/>
+        <copy todir="${dist}/${release}/data">
+            <fileset dir="${data}">
+                <include name="sample.json"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy logs folder -->
+        <mkdir dir="${dist}/${release}/logs"/>
+    </target>
+
+    <target name="copy-node" description="Copying node specific binaries">
+        <!-- Copy lib folder -->
+        <copy todir="${dist}/${release}/lib" includeEmptyDirs="false">
+            <fileset dir="${lib}">
+                <exclude name="test/**/*"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy node_modules folder -->
+        <copy todir="${dist}/${release}/node_modules" includeEmptyDirs="false">
+            <fileset dir="${node_modules}">
+                <exclude name="chai/**/*"/>
+                <exclude name="mocha/**/*"/>
+                <exclude name="matcha/**/*"/>
+                <exclude name="pip-services-test-node/**/*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="copy" depends="copy-common,copy-node"/>
+    
+    <target name="package" depends="copy" description="Creating zip packages for distribution">
+        <zip destfile="${dist}/${release}.zip" basedir="${dist}" includes="${release}/**/*" />
+        <copy file="${dist}/${release}.zip" tofile="${dist}/${name}-latest.zip"/>
+    </target>
+    
+    <target name="build" depends="package"/>
+    
+</project>
