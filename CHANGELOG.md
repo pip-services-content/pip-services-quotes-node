@@ -1,8 +1,8 @@
 # Quotes Microservice ChangeLog
 
-## <a name="1.1.0"></a> 1.1.0 (2017-03-31)
+## <a name="2.0.0"></a> 2.0.0 (2017-03-31)
 
-### Features
+### Breaking changes
 * Migrated to pip-services 2.0
 
 ## <a name="1.0.0"></a> 1.0.0 (2016-08-05)
