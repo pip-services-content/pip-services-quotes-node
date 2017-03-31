@@ -1,52 +1,62 @@
+let _ = require('lodash');
 let async = require('async');
 let assert = require('chai').assert;
 
-import { FilterParams } from 'pip-services-runtime-node';
-import { PagingParams } from 'pip-services-runtime-node';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
+
+import { QuoteV1 } from '../../src/data/version1/QuoteV1';
+import { QuoteStatusV1 } from '../../src/data/version1/QuoteStatusV1';
 
 import { IQuotesPersistence } from '../../src/persistence/IQuotesPersistence';
 
-let QUOTE1 = {
+let QUOTE1: QuoteV1 = {
     id: '1',
-    text: 'Text 1',
-    author: 'Author 1'
+    text: { en: 'Text 1' },
+    author: { en: 'Author 1' },
+    status: QuoteStatusV1.Completed,
+    tags: [],
+    all_tags: []
 };
-let QUOTE2 = {
+let QUOTE2: QuoteV1 = {
     id: '2',
+    text: { en: 'Text 2' },
+    author: { en: 'Author 2' },
+    status: QuoteStatusV1.Completed,
     tags: ['TAG 1'],
-    text: 'Text 2',
-    author: 'Author 2'
+    all_tags: ['tag1']
 };
-let QUOTE3 = {
+let QUOTE3: QuoteV1 = {
     id: '3',
+    text: { en: 'Text 2' },
+    author: { en: 'Author 2' },
+    status: QuoteStatusV1.Translating,
     tags: ['Tag 1', 'tag 2'],
-    text: 'Text 2',
-    author: 'Author 2',
-    status: 'translating'
+    all_tags: ['tag1', 'tag2']
 };
 
 export class QuotesPersistenceFixture {
-    private _db: IQuotesPersistence;
+    private _persistence: IQuotesPersistence;
     
-    constructor(db) {
-        assert.isNotNull(db);
-        this._db = db;
+    constructor(persistence) {
+        assert.isNotNull(persistence);
+        this._persistence = persistence;
     }
 
-    createQuotes(done) {
+    private testCreateQuotes(done) {
         async.series([
         // Create one quote
             (callback) => {
-                this._db.createQuote(
+                this._persistence.create(
                     null,
                     QUOTE1,
                     (err, quote) => {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.status, 'writing');
-                        assert.equal(quote.text, QUOTE1.text);
-                        assert.equal(quote.author, QUOTE1.author);
+                        assert.equal(quote.status, QUOTE1.status);
+                        assert.equal(quote.text.en, QUOTE1.text.en);
+                        assert.equal(quote.author.en, QUOTE1.author.en);
 
                         callback();
                     }
@@ -54,16 +64,16 @@ export class QuotesPersistenceFixture {
             },
         // Create another quote
             (callback) => {
-                this._db.createQuote(
+                this._persistence.create(
                     null,
                     QUOTE2,
                     (err, quote) => {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.status, 'writing');
-                        assert.equal(quote.text, QUOTE2.text);
-                        assert.equal(quote.author, QUOTE2.author);
+                        assert.equal(quote.status, QUOTE2.status);
+                        assert.equal(quote.text.en, QUOTE2.text.en);
+                        assert.equal(quote.author.en, QUOTE2.author.en);
 
                         callback();
                     }
@@ -71,7 +81,7 @@ export class QuotesPersistenceFixture {
             },
         // Create yet another quote
             (callback) => {
-                this._db.createQuote(
+                this._persistence.create(
                     null,
                     QUOTE3,
                     (err, quote) => {
@@ -79,8 +89,8 @@ export class QuotesPersistenceFixture {
 
                         assert.isObject(quote);
                         assert.equal(quote.status, QUOTE3.status);
-                        assert.equal(quote.text, QUOTE3.text);
-                        assert.equal(quote.author, QUOTE3.author);
+                        assert.equal(quote.text.en, QUOTE3.text.en);
+                        assert.equal(quote.author.en, QUOTE3.author.en);
 
                         callback();
                     }
@@ -90,22 +100,26 @@ export class QuotesPersistenceFixture {
     }
                 
     testCrudOperations(done) {
+        let quote1: QuoteV1;
+
         async.series([
         // Create items
             (callback) => {
-                this.createQuotes(callback);
+                this.testCreateQuotes(callback);
             },
         // Get all quotes
             (callback) => {
-                this._db.getQuotes(
+                this._persistence.getPageByFilter(
                     null,
                     new FilterParams(),
                     new PagingParams(),
-                    (err, quotes) => {
+                    (err, page) => {
                         assert.isNull(err);
 
-                        assert.isObject(quotes);
-                        assert.lengthOf(quotes.data, 3);
+                        assert.isObject(page);
+                        assert.lengthOf(page.data, 3);
+
+                        quote1 = page.data[0];
 
                         callback();
                     }
@@ -113,16 +127,17 @@ export class QuotesPersistenceFixture {
             },
         // Update the quote
             (callback) => {
-                this._db.updateQuote(
+                quote1.text.en = 'Updated Content 1';
+
+                this._persistence.update(
                     null,
-                    QUOTE1.id,
-                    { text: 'Updated Content 1' },
+                    quote1,
                     (err, quote) => {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.text, 'Updated Content 1');
-                        assert.equal(quote.author, QUOTE1.author);
+                        assert.equal(quote.text.en, 'Updated Content 1');
+                        assert.equal(quote.id, quote1.id);
 
                         callback();
                     }
@@ -130,9 +145,9 @@ export class QuotesPersistenceFixture {
             },
         // Delete quote
             (callback) => {
-                this._db.deleteQuote(
+                this._persistence.deleteById(
                     null,
-                    QUOTE1.id,
+                    quote1.id,
                     (err) => {
                         assert.isNull(err);
 
@@ -142,9 +157,9 @@ export class QuotesPersistenceFixture {
             },
         // Try to get delete quote
             (callback) => {
-                this._db.getQuoteById(
+                this._persistence.getOneById(
                     null,
-                    QUOTE1.id,
+                    quote1.id,
                     (err, quote) => {
                         assert.isNull(err);
 
@@ -161,11 +176,11 @@ export class QuotesPersistenceFixture {
         async.series([
         // Create quotes
             (callback) => {
-                this.createQuotes(callback);
+                this.testCreateQuotes(callback);
             },
         // Get quotes filtered by tags
             (callback) => {
-                this._db.getQuotes(
+                this._persistence.getPageByFilter(
                     null,
                     FilterParams.fromValue({
                         tags: ['tag 1']
@@ -183,7 +198,7 @@ export class QuotesPersistenceFixture {
             },
         // Get quotes except certain ids
             (callback) => {
-                this._db.getQuotes(
+                this._persistence.getPageByFilter(
                     null,
                     FilterParams.fromValue({
                         except_ids: QUOTE1.id + ',' + QUOTE3.id
@@ -201,7 +216,7 @@ export class QuotesPersistenceFixture {
             },
         // Get quotes filtered by status
             (callback) => {
-                this._db.getQuotes(
+                this._persistence.getPageByFilter(
                     null,
                     FilterParams.fromValue({
                         status: QUOTE3.status
@@ -224,15 +239,15 @@ export class QuotesPersistenceFixture {
         async.series([
         // Create quotes
             (callback) => {
-                this.createQuotes(callback);
+                this.testCreateQuotes(callback);
             },
         // Get random quote filtered by tags
             (callback) => {
-                this._db.getRandomQuote(
+                this._persistence.getOneRandom(
                     null,
                     FilterParams.fromValue({
                         tags: ['tag 1'],
-                        status: 'writing'
+                        status: QuoteStatusV1.Completed
                     }),
                     (err, quote) => {
                         assert.isNull(err);

@@ -1,13 +1,25 @@
-import { IBusinessLogic } from 'pip-services-runtime-node';
-import { DataPage } from 'pip-services-runtime-node';
-import { FilterParams } from 'pip-services-runtime-node';
-import { PagingParams } from 'pip-services-runtime-node';
+import { DataPage } from 'pip-services-commons-node';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
 
-export interface IQuotesBusinessLogic extends IBusinessLogic {
-    getQuotes(correlationId: string, filter: FilterParams, paging: PagingParams, callback: any);
-    getRandomQuote(correlationId: string, filter: FilterParams, callback: any);
-    getQuoteById(correlationId: string, quoteId: string, callback: any);
-    createQuote(correlationId: string, quote: any, callback: any);
-    updateQuote(correlationId: string, quoteId: string, quote: any, callback: any);
-    deleteQuote(correlationId: string, quoteId: any, callback: any);
+import { QuoteV1 } from '../data/version1/QuoteV1';
+
+export interface IQuotesBusinessLogic {
+    getQuotes(correlationId: string, filter: FilterParams, paging: PagingParams, 
+        callback: (err: any, page: DataPage<QuoteV1>) => void): void;
+
+    getRandomQuote(correlationId: string, filter: FilterParams, 
+        callback: (err: any, quote: QuoteV1) => void): void;
+
+    getQuoteById(correlationId: string, quote_id: string, 
+        callback: (err: any, quote: QuoteV1) => void): void;
+
+    createQuote(correlationId: string, quote: QuoteV1, 
+        callback: (err: any, quote: QuoteV1) => void): void;
+
+    updateQuote(correlationId: string, quote: QuoteV1, 
+        callback: (err: any, quote: QuoteV1) => void): void;
+
+    deleteQuoteById(correlationId: string, quote_id: string,
+        callback: (err: any, quote: QuoteV1) => void): void;
 }

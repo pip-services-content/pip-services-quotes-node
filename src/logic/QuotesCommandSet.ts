@@ -1,11 +1,12 @@
-import { CommandSet } from 'pip-services-runtime-node';
-import { ICommand } from 'pip-services-runtime-node';
-import { Command } from 'pip-services-runtime-node';
-import { Schema } from 'pip-services-runtime-node';
-import { DynamicMap } from 'pip-services-runtime-node';
-import { FilterParams } from 'pip-services-runtime-node';
-import { PagingParams } from 'pip-services-runtime-node';
+import { CommandSet } from 'pip-services-commons-node';
+import { ICommand } from 'pip-services-commons-node';
+import { Command } from 'pip-services-commons-node';
+import { Schema } from 'pip-services-commons-node';
+import { Parameters } from 'pip-services-commons-node';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
 
+import { QuoteV1 } from '../data/version1/QuoteV1';
 import { IQuotesBusinessLogic } from './IQuotesBusinessLogic';
 
 export class QuotesCommandSet extends CommandSet {
@@ -22,18 +23,14 @@ export class QuotesCommandSet extends CommandSet {
 		this.addCommand(this.makeGetQuoteByIdCommand());
 		this.addCommand(this.makeCreateQuoteCommand());
 		this.addCommand(this.makeUpdateQuoteCommand());
-		this.addCommand(this.makeDeleteQuoteCommand());
+		this.addCommand(this.makeDeleteQuoteByIdCommand());
     }
 
 	private makeGetQuotesCommand(): ICommand {
 		return new Command(
-			this._logic,
 			"get_quotes",
-			new Schema()
-				.withOptionalProperty("filter", "FilterParams")
-				.withOptionalProperty("paging", "PagingParams")
-			,
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let filter = FilterParams.fromValue(args.get("filter"));
                 let paging = PagingParams.fromValue(args.get("paging"));
                 this._logic.getQuotes(correlationId, filter, paging, callback);
@@ -43,11 +40,9 @@ export class QuotesCommandSet extends CommandSet {
 
 	private makeGetRandomQuoteCommand(): ICommand {
 		return new Command(
-			this._logic,
 			"get_random_quote",
-			new Schema()
-				.withOptionalProperty("filter", "FilterParams"),
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let filter = FilterParams.fromValue(args.get("filter"));
                 this._logic.getRandomQuote(correlationId, filter, callback);
             }
@@ -56,24 +51,20 @@ export class QuotesCommandSet extends CommandSet {
 
 	private makeGetQuoteByIdCommand(): ICommand {
 		return new Command(
-			this._logic,
 			"get_quote_by_id",
-			new Schema()
-				.withProperty("quote_id", "string"),
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
-                let quoteId = args.getNullableString("quote_id");
-                this._logic.getQuoteById(correlationId, quoteId, callback);
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
+                let quote_id = args.getAsString("quote_id");
+                this._logic.getQuoteById(correlationId, quote_id, callback);
             }
 		);
 	}
 
 	private makeCreateQuoteCommand(): ICommand {
 		return new Command(
-			this._logic,
 			"create_quote",
-			new Schema()
-				.withProperty("quote", "Quote"),
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let quote = args.get("quote");
                 this._logic.createQuote(correlationId, quote, callback);
             }
@@ -82,28 +73,22 @@ export class QuotesCommandSet extends CommandSet {
 
 	private makeUpdateQuoteCommand(): ICommand {
 		return new Command(
-			this._logic,
 			"update_quote",
-			new Schema()
-				.withProperty("quote_id", "string")
-				.withProperty("quote", "any"),
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
-                let quoteId = args.getNullableString("quote_id");
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let quote = args.get("quote");
-                this._logic.updateQuote(correlationId, quoteId, quote, callback);
+                this._logic.updateQuote(correlationId, quote, callback);
             }
 		);
 	}
 	
-	private makeDeleteQuoteCommand(): ICommand {
+	private makeDeleteQuoteByIdCommand(): ICommand {
 		return new Command(
-			this._logic,
-			"delete_quote",
-			new Schema()
-				.withProperty("quote_id", "string"),
-            (correlationId: string, args: DynamicMap, callback: (err: any, result: any) => void) => {
-                let quoteId = args.getNullableString("quote_id");
-                this._logic.deleteQuote(correlationId, quoteId, callback);
+			"delete_quote_by_id",
+			null,
+            (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
+                let quoteId = args.getAsNullableString("quote_id");
+                this._logic.deleteQuoteById(correlationId, quoteId, callback);
 			}
 		);
 	}

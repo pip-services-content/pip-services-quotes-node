@@ -1,24 +1,23 @@
-import { ComponentSet } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
+import { ConfigParams } from 'pip-services-commons-node';
 
 import { QuotesMemoryPersistence } from '../../src/persistence/QuotesMemoryPersistence';
 import { QuotesPersistenceFixture } from './QuotesPersistenceFixture';
 
 suite('QuotesMemoryPersistence', ()=> {
-    let db, fixture;
+    let persistence: QuotesMemoryPersistence;
+    let fixture: QuotesPersistenceFixture;
     
     setup((done) => {
-        db = new QuotesMemoryPersistence();
-        db.configure(new ComponentConfig());
+        persistence = new QuotesMemoryPersistence();
+        persistence.configure(new ConfigParams());
         
-        fixture = new QuotesPersistenceFixture(db);
+        fixture = new QuotesPersistenceFixture(persistence);
         
-        db.link(new ComponentSet());
-        db.open(done);
+        persistence.open(null, done);
     });
     
     teardown((done) => {
-        db.close(done);
+        persistence.close(null, done);
     });
         
     test('CRUD Operations', (done) => {

@@ -3,19 +3,19 @@
 Quotes microservice implements a REST compatible API, that can be accessed on configured port.
 All input and output data is serialized in JSON format. Errors are returned in [standard format]().
 
-* [MultiString class](#class1)
-* [Quote class](#class2)
-* [QuotePage class](#class3)
-* [GET /quotes](#operation1)
-* [GET /quotes/random](#operation2)
-* [GET /quotes/:quote_id](#operation3)
-* [POST /quotes](#operation4)
-* [PUT /quotes/:quote_id](#operation5)
-* [DELETE /quotes/:quote_id](#operation6)
+* [MultiStringV1 class](#class1)
+* [QuoteV1 class](#class2)
+* [DataPage<QuoteV1> class](#class3)
+* [POST /quotes/get_quotes](#operation1)
+* [POST /quotes/get_random_quote](#operation2)
+* [POST /quotes/get_quote_by_id](#operation3)
+* [POST /quotes/create_quote](#operation4)
+* [POST /quotes/update_quote](#operation5)
+* [POST /quotes/delete_quote_id](#operation6)
 
 ## Data types
 
-### <a name="class1"></a> MultiString class
+### <a name="class1"></a> MultiStringV1 class
 
 String that contains versions in multiple languages
 
@@ -28,7 +28,7 @@ String that contains versions in multiple languages
 - ru: string - Russian version of the string
 - .. - other languages can be added here
 
-### <a name="class2"></a> Quote class
+### <a name="class2"></a> QuoteV1 class
 
 Represents an inspirational quote
 
@@ -40,7 +40,7 @@ Represents an inspirational quote
 - tags: [string] - (optional) search tags that represent topics associated with the quote
 - all_tags: [string] - (read only) explicit and hash tags in normalized format for searching  
 
-### <a name="class3"></a> QuotePage class
+### <a name="class3"></a> DataPage<QuoteV1> class
 
 Represents a paged result with subset of requested quotes
 
@@ -50,77 +50,75 @@ Represents a paged result with subset of requested quotes
 
 ## Operations
 
-### <a name="operation1"></a> Method: 'GET', route '/quotes'
+### <a name="operation1"></a> Method: 'POST', route '/quotes/get_quotes'
 
 Retrieves a collection of quotes according to specified criteria
 
-**Parameters:** 
+**Request body:** 
 - correlation_id: string - (optional) unique id that identifies distributed transaction
-- tags: string - (optional) a comma-separated list of tags with topic names
-- status: string - (optional) quote editing status
-- author: string - (optional) author name in any language 
-- skip: int - (optional) start of page (default: 0). Operation returns paged result
-- take: int - (optional) page length (max: 100). Operation returns paged result
+- filter: Object
+  - tags: string - (optional) a comma-separated list of tags with topic names
+  - status: string - (optional) quote editing status
+  - author: string - (optional) author name in any language 
+- paging: Object
+  - skip: int - (optional) start of page (default: 0). Operation returns paged result
+  - take: int - (optional) page length (max: 100). Operation returns paged result
 
 **Response body:**
-Array of Quote objects, QuotePage object is paging was requested or error
+Array of Quote objects, DataPage<QuoteV1> object is paging was requested or error
 
-### <a name="operation2"></a> Method: 'GET', route '/quotes/random'
+### <a name="operation2"></a> Method: 'POST', route '/quotes/get\_random\_quote'
 
 Retrieves a random quote from filtered resultset
 
-**Parameters:** 
+**Request body:** 
 - correlation_id: string - (optional) unique id that identifies distributed transaction
-- tags: string - (optional) a comma-separated list of tags with topic names
-- status: string - (optional) quote editing status
-- author: string - (optional) author name in any language 
+- filter: Object
+  - tags: string - (optional) a comma-separated list of tags with topic names
+  - status: string - (optional) quote editing status
+  - author: string - (optional) author name in any language 
 
 **Response body:**
 Random Quote object, null if object wasn't found or error 
 
-### <a name="operation3"></a> Method: 'GET', route '/quotes/:quote_id'
+### <a name="operation3"></a> Method: 'POST', route '/quotes/get\_quote\_by_id'
 
 Retrieves a single quote specified by its unique id
 
-**Parameters:** 
+**Request body:** 
 - correlation_id: string - (optional) unique id that identifies distributed transaction
 - quote_id: string - unique quote id
 
 **Response body:**
 Quote object, null if object wasn't found or error 
 
-### <a name="operation4"></a> Method: 'POST', route '/quotes'
+### <a name="operation4"></a> Method: 'POST', route '/quotes/create_quote'
 
 Creates a new quote
 
-**Parameters:**
-- correlation_id: string - (optional) unique id that identifies distributed transaction
-
 **Request body:**
-Quote object to be created. If object id is not defined it is assigned automatically.
+- correlation_id: string - (optional) unique id that identifies distributed transaction
+- quote: QuoteV1 - Quote object to be created. If object id is not defined it is assigned automatically.
 
 **Response body:**
 Created Quote object or error
 
-### <a name="operation5"></a> Method: 'PUT', route '/quotes/:quote_id'
+### <a name="operation5"></a> Method: 'POST', route '/quotes/update_quote'
 
 Updates quote specified by its unique id
 
-**Parameters:** 
+**Request body:** 
 - correlation_id: string - (optional) unique id that identifies distributed transaction
-- quote_id: string - unique Quote object id
-
-**Request body:**
-Quote object with new values. Partial updates are supported
+- quote: QuoteV1 - Quote object with new values. Partial updates are supported
 
 **Response body:**
 Updated Quote object or error 
  
-### <a name="operation6"></a> Method: 'DELETE', route '/quotes/:quote_id'
+### <a name="operation6"></a> Method: 'POST', route '/quotes/delete\_quote\_by_id'
 
 Deletes quote specified by its unique id
 
-**Parameters:** 
+**Request body:** 
 - correlation_id: string - (optional) unique id that identifies distributed transaction
 - quote_id: string - unique quote id
 

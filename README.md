@@ -30,7 +30,7 @@ This microservice has no dependencies on other microservices.
 
 Right now the only way to get the microservice is to check it out directly from github repository
 ```bash
-git clone git@github.com:pip-services/pip-services-quotes.git
+git clone git@github.com:pip-services-content/pip-services-quotes.git
 ```
 
 Pip.Service team is working to implement packaging and make stable releases available for your 
@@ -43,42 +43,23 @@ As the starting point you can use example configuration from **config.example.ya
 
 Example of microservice configuration
 ```yaml
-logs:
-    descriptor:
-        type: "console" 
-    options:
-        level: "debug" 
-counters: 
-    descriptor:
-        type: "log"
-    options: 
-        timeout: 10000 
-persistence:
-    descriptor:
-        group: "pip-services-quotes"
-        type: "file"
-    options:
-        path: "quotes.json"
-controlers:
-    descriptor:
-        group: "pip-services-quotes"
-services:
-  - descriptor:
-        group: "pip-services-quotes"
-        type: "seneca"
-        version: "1.0"
-    endpoint:
-        type: "tcp"
-        host: localhost
-        port: 9002
-  - descriptor:            
-        group: "pip-services-quotes"
-        type: "rest"
-        version: "1.0"
-    endpoint:
-        type: "http"
-        host: "localhost"
-        port: 8002
+- descriptor: "pip-services-container:container-info:default:default:1.0"
+  name: "pip-services-quotes"
+  description: "Quotes microservice"
+
+- descriptor: "pip-services-commons:logger:console:default:1.0"
+  level: "trace"
+
+- descriptor: "pip-services-quotes:persistence:file:default:1.0"
+  path: "./data/quotes.json"
+
+- descriptor: "pip-services-quotes:controller:default:default:1.0"
+
+- descriptor: "pip-services-quotes:service:rest:default:1.0"
+  connection:
+    protocol: "http"
+    host: "0.0.0.0"
+    port: 3000
 ```
  
 For more information on the microservice configuration see [Configuration Guide](Configuration.md).
@@ -99,7 +80,7 @@ If you use Node.js then you should add dependency to the client SDK into **packa
     ...
     "dependencies": {
         ....
-        "pip-clients-quotes-node": "^1.0.*",
+        "pip-clients-quotes-node": "^1.1.*",
         ...
     }
 }
@@ -107,14 +88,14 @@ If you use Node.js then you should add dependency to the client SDK into **packa
 
 Inside your code get the reference to the client SDK
 ```javascript
-var sdk = new require('pip-clients-quotes-node').Version1;
+var sdk = new require('pip-clients-quotes-node');
 ```
 
 Define client configuration parameters that match configuration of the microservice external API
 ```javascript
 // Client configuration
 var config = {
-    endpoint: {
+    connection: {
         protocol: 'http',
         host: 'localhost', 
         port: 80002
@@ -125,10 +106,10 @@ var config = {
 Instantiate the client and open connection to the microservice
 ```javascript
 // Create the client instance
-var client = sdk.QuotesRestClient(config);
+var client = sdk.QuotesRestClientV1(config);
 
 // Connect to the microservice
-client.open(function(err) {
+client.open(null, function(err) {
     if (err) {
         console.error('Connection to the microservice failed');
         console.error(err);
@@ -144,8 +125,8 @@ Now the client is ready to perform operations
 ```javascript
 // Create a new quote
 var quote = {
-    text: 'Get in hurry slowly',
-    author: 'Russian proverb',
+    text: { en: 'Get in hurry slowly' },
+    author: { en: 'Russian proverb' },
     tags: ['time management'],
     status: 'completed'
 };
@@ -172,7 +153,7 @@ client.getQuotes(
         skip: 0,
         take: 10
     },
-    function(err, quotesPage) {
+    function(err, page) {
     ...    
     }
 );

@@ -1,15 +1,7 @@
-/**
- * @file Quotes process launcher
- * @copyright Digital Living Software Corp. 2014-2016
- */
+let QuotesProcess = require('../obj/src/container/QuotesProcess').QuotesProcess;
 
-/* global */
-
-'use strict';
-
-var _ = require('lodash');
-var QuotesProcessRunner = require('../lib/src/run/QuotesProcessRunner').QuotesProcessRunner;
-
-var runner = new QuotesProcessRunner();
-
-runner.startWithDefaultConfig('../config/config.yaml');
+try {
+    new QuotesProcess().runWithArguments(process.argv);
+} catch (ex) {
+    console.error(ex);
+}

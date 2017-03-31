@@ -40,7 +40,7 @@ you may need to install database servers:
 
 After your environment is ready you can check out microservice source code from the Github repository:
 ```bash
-git clone git@github.com:pip-services/pip-services-quotes.git
+git clone git@github.com:pip-services-content/pip-services-quotes-node.git
 ```
 
 Then go to the project folder and install dependent modules:
@@ -82,7 +82,7 @@ Before you execute tests you need to set configuration options in config.json fi
 As a starting point you can use example from config.example.json:
 
 ```bash
-copy config.example.json config.json
+copy config.example.yaml config.yaml
 ``` 
 
 After that check all configuration options. Specifically, pay attention to connection options

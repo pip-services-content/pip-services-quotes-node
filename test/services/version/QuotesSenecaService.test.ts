@@ -2,55 +2,75 @@ let _ = require('lodash');
 let async = require('async');
 let assert = require('chai').assert;
 
-import { ComponentSet } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
-import { SenecaAddon } from 'pip-services-runtime-node';
-import { DynamicMap } from 'pip-services-runtime-node';
-import { LifeCycleManager } from 'pip-services-runtime-node';
+import { Descriptor } from 'pip-services-commons-node';
+import { ConfigParams } from 'pip-services-commons-node';
+import { References } from 'pip-services-commons-node';
+import { ConsoleLogger } from 'pip-services-commons-node';
+import { SenecaInstance } from 'pip-services-net-node';
 
+import { QuoteV1 } from '../../../src/data/version1/QuoteV1';
+import { QuoteStatusV1 } from '../../../src/data/version1/QuoteStatusV1';
 import { QuotesMemoryPersistence } from '../../../src/persistence/QuotesMemoryPersistence';
 import { QuotesController } from '../../../src/logic/QuotesController';
-import { QuotesSenecaService } from '../../../src/services/version1/QuotesSenecaService';
+import { QuotesSenecaServiceV1 } from '../../../src/services/version1/QuotesSenecaServiceV1';
 
-let QUOTE1 = {
+let QUOTE1: QuoteV1 = {
     id: '1',
-    text: 'Text 1',
-    author: 'Author 1'
+    text: { en: 'Text 1' },
+    author: { en: 'Author 1' },
+    status: QuoteStatusV1.Completed,
+    tags: null,
+    all_tags: null
 };
-let QUOTE2 = {
+let QUOTE2: QuoteV1 = {
     id: '2',
+    text: { en: 'Text 2' },
+    author: { en: 'Author 2' },
+    status: QuoteStatusV1.Completed,
     tags: ['TAG 1'],
-    text: 'Text 2',
-    author: 'Author 2'
+    all_tags: null
 };
 
-suite('QuotesSenecaService', ()=> {        
-    let db = new QuotesMemoryPersistence();
-    db.configure(new ComponentConfig());
-
-    let ctrl = new QuotesController();
-    ctrl.configure(new ComponentConfig());
-
-    let service = new QuotesSenecaService();
-    service.configure(new ComponentConfig());
-
-    let seneca = new SenecaAddon();
-    seneca.configure(new ComponentConfig());
-
-    let components = ComponentSet.fromComponents(db, ctrl, service, seneca);
+suite('QuotesSenecaServiceV1', ()=> {        
+    let seneca: any;
+    let service: QuotesSenecaServiceV1;
+    let persistence: QuotesMemoryPersistence;
+    let controller: QuotesController;
 
     suiteSetup((done) => {
-        LifeCycleManager.linkAndOpen(components, done);
+        persistence = new QuotesMemoryPersistence();
+        controller = new QuotesController();
+
+        service = new QuotesSenecaServiceV1();
+        service.configure(ConfigParams.fromTuples(
+            "connection.protocol", "none"
+        ));
+
+        let logger = new ConsoleLogger();
+        let senecaAddon = new SenecaInstance();
+
+        let references: References = References.fromTuples(
+            new Descriptor('pip-services-commons', 'logger', 'console', 'default', '1.0'), logger,
+            new Descriptor('pip-services-net', 'seneca', 'instance', 'default', '1.0'), senecaAddon,
+            new Descriptor('pip-services-quotes', 'persistence', 'memory', 'default', '1.0'), persistence,
+            new Descriptor('pip-services-quotes', 'controller', 'default', 'default', '1.0'), controller,
+            new Descriptor('pip-services-quotes', 'service', 'commandable-seneca', 'default', '1.0'), service
+        );
+
+        controller.setReferences(references);
+        service.setReferences(references);
+
+        seneca = senecaAddon.getInstance();
+
+        service.open(null, done);
     });
     
     suiteTeardown((done) => {
-        seneca.getSeneca().close(() => {
-            LifeCycleManager.close(components, done);
-        });
+        service.close(null, done);
     });
     
     setup((done) => {
-        db.clearTestData(done);
+        persistence.clear(null, done);
     });
     
     test('CRUD Operations', (done) => {
@@ -59,7 +79,7 @@ suite('QuotesSenecaService', ()=> {
         async.series([
         // Create one quote
             (callback) => {
-                seneca.getSeneca().act(
+                seneca.act(
                     {
                         role: 'quotes',
                         cmd: 'create_quote',
@@ -69,8 +89,8 @@ suite('QuotesSenecaService', ()=> {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.author, QUOTE1.author);
-                        assert.equal(quote.text, QUOTE1.text);
+                        assert.equal(quote.author.en, QUOTE1.author.en);
+                        assert.equal(quote.text.en, QUOTE1.text.en);
 
                         quote1 = quote;
 
@@ -80,7 +100,7 @@ suite('QuotesSenecaService', ()=> {
             },
         // Create another quote
             (callback) => {
-                seneca.getSeneca().act(
+                seneca.act(
                     {
                         role: 'quotes',
                         cmd: 'create_quote',
@@ -90,8 +110,8 @@ suite('QuotesSenecaService', ()=> {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.author, QUOTE2.author);
-                        assert.equal(quote.text, QUOTE2.text);
+                        assert.equal(quote.author.en, QUOTE2.author.en);
+                        assert.equal(quote.text.en, QUOTE2.text.en);
 
                         quote2 = quote;
 
@@ -101,16 +121,16 @@ suite('QuotesSenecaService', ()=> {
             },
         // Get all quotes
             (callback) => {
-                seneca.getSeneca().act(
+                seneca.act(
                     {
                         role: 'quotes',
                         cmd: 'get_quotes' 
                     },
-                    (err, quotes) => {
+                    (err, page) => {
                         assert.isNull(err);
 
-                        assert.isObject(quotes);
-                        assert.lengthOf(quotes.data, 2);
+                        assert.isObject(page);
+                        assert.lengthOf(page.data, 2);
 
                         callback();
                     }
@@ -118,19 +138,20 @@ suite('QuotesSenecaService', ()=> {
             },
         // Update the quote
             (callback) => {
-                seneca.getSeneca().act(
+                quote1.text = { en: 'Updated Content 1' };
+
+                seneca.act(
                     {
                         role: 'quotes',
                         cmd: 'update_quote',
-                        quote_id: quote1.id,
-                        quote: { text: 'Updated Content 1' }
+                        quote: quote1
                     },
                     (err, quote) => {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.text, 'Updated Content 1');
-                        assert.equal(quote.author, QUOTE1.author);
+                        assert.equal(quote.text.en, 'Updated Content 1');
+                        assert.equal(quote.author.en, QUOTE1.author.en);
 
                         quote1 = quote;
 
@@ -140,10 +161,10 @@ suite('QuotesSenecaService', ()=> {
             },
         // Delete quote
             (callback) => {
-                seneca.getSeneca().act(
+                seneca.act(
                     {
                         role: 'quotes',
-                        cmd: 'delete_quote',
+                        cmd: 'delete_quote_by_id',
                         quote_id: quote1.id
                     },
                     (err) => {
@@ -155,7 +176,7 @@ suite('QuotesSenecaService', ()=> {
             },
         // Try to get delete quote
             (callback) => {
-                seneca.getSeneca().act(
+                seneca.act(
                     {
                         role: 'quotes',
                         cmd: 'get_quote_by_id',

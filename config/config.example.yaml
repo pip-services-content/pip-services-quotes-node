@@ -1,75 +1,17 @@
----
-logs:
-    descriptor:
-        type: "console"
-    options:
-        level: "trace"
+- descriptor: "pip-services-container:container-info:default:default:1.0"
+  name: "pip-services-quotes"
+  description: "Quotes microservice"
 
-counters:
-    descriptor:
-        type: log
-    options:
-        timeout: 10000
+- descriptor: "pip-services-commons:logger:console:default:1.0"
+  level: "trace"
 
-persistence:
-    # MongoDB persistence
-    descriptor:
-        group: "pip-services-quotes"
-        type: "mongodb"
-    connection:
-        type: "mongodb"
-        host: "localhost"
-        database: "pipservicestest"
-    options:
-        server:
-            poolSize: 4
-            socketOptions:
-                keepAlive: 1
-                connectTimeoutMS: 5000
-            auto_reconnect: true
-        debug: false
-    # # File persistence        
-    # descriptor:
-    #     group: "pip-services-quotes"
-    #     type: "file"
-    # options:
-    #     file: "./data/quotes.json"        
-    # # In-memory persistence        
-    # descriptor:
-    #     group: "pip-services-quotes"
-    #     type: "memory"
+- descriptor: "pip-services-quotes:persistence:file:default:1.0"
+  path: "./data/quotes.json"
 
-controllers:
-    descriptor:
-        group: "pip-services-quotes"
+- descriptor: "pip-services-quotes:controller:default:default:1.0"
 
-clients:
-  - descriptor:
-        group: "pip-services-quotes"
-        type: "lambda"
-        version: "1.0"
-    endpoint:
-        function: "arn:aws:lambda:us-east-1:268549927901:function:pip-services-quotes"
-        region: "us-east-1"
-    options:
-        access_key_id: "ZZZZZZ5Z4DEVJYZ2PUXA"
-        secret_access_key: "ZZZZZZWjEUNWVdpPqVGjHSfwTjer//pHqBfsKkMU" 
-        timeout: 30000
-
-services:
-  - descriptor:
-        group: "pip-services-quotes"
-        type: "seneca"
-        version: "1.0"
-    endpoint:
-        protocol: "tcp"
-        host: "localhost"
-        port: 9002
-  - descriptor:
-        group: "pip-services-quotes"
-        type: "rest"
-        version: "1.0"
-    endpoint:
-        protocol: "http"
-        host: "0.0.0.0"
-        port: 8002
+- descriptor: "pip-services-quotes:service:rest:default:1.0"
+  connection:
+    protocol: "http"
+    host: "0.0.0.0"
+    port: 3000

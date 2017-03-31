@@ -1,39 +1,28 @@
-import { ComponentSet } from 'pip-services-runtime-node';
-import { ComponentConfig } from 'pip-services-runtime-node';
-import { DynamicMap } from 'pip-services-runtime-node';
+import { ConfigParams } from 'pip-services-commons-node';
 
 import { QuotesFilePersistence } from '../../src/persistence/QuotesFilePersistence';
 import { QuotesPersistenceFixture } from './QuotesPersistenceFixture';
 
-let config = ComponentConfig.fromValue({
-    descriptor: {
-        type: 'file'
-    },
-    options: {
-        path: './data/quotes.test.json',
-        data: []
-    }
-});
-
 suite('QuotesFilePersistence', ()=> {
-    let db, fixture;
+    let persistence: QuotesFilePersistence;
+    let fixture: QuotesPersistenceFixture;
     
     setup((done) => {
-        db = new QuotesFilePersistence();
-        db.configure(config);
+        persistence = new QuotesFilePersistence('./data/quotes.test.json');
 
-        fixture = new QuotesPersistenceFixture(db);
-        
-        db.link(new ComponentSet());
-        db.open(done);
+        fixture = new QuotesPersistenceFixture(persistence);
+
+        persistence.open(null, (err) => {
+            persistence.clear(null, done);
+        });
     });
     
     teardown((done) => {
-        db.close(done);
+        persistence.close(null, done);
     });
         
     test('CRUD Operations', (done) => {
-        db.clearTestData(done);
+        fixture.testCrudOperations(done);
     });
 
     test('Get with Filters', (done) => {

@@ -1,95 +1,89 @@
 let _ = require('lodash');
 
-import { Category } from 'pip-services-runtime-node';
-import { ComponentDescriptor } from 'pip-services-runtime-node';
-import { MongoDbPersistence } from 'pip-services-runtime-node';
-import { FilterParams } from 'pip-services-runtime-node';
-import { PagingParams } from 'pip-services-runtime-node';
-import { TagsProcessor } from 'pip-services-runtime-node';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
+import { DataPage } from 'pip-services-commons-node';
+import { IdentifiableMongoDbPersistence } from 'pip-services-data-node';
 
+import { QuoteV1 } from '../data/version1/QuoteV1';
+import { TagsProcessor } from '../data/TagsProcessor';
 import { IQuotesPersistence } from './IQuotesPersistence';
+import { QuotesMongoDbSchema } from './QuotesMongoDbSchema';
 
-export class QuotesMongoDbPersistence extends MongoDbPersistence implements IQuotesPersistence {
-	/**
-	 * Unique descriptor for the QuotesMongoDbPersistence component
-	 */
-	public static Descriptor: ComponentDescriptor = new ComponentDescriptor(
-		Category.Persistence, "pip-services-quotes", "mongodb", "*"
-	);
+export class QuotesMongoDbPersistence extends IdentifiableMongoDbPersistence<QuoteV1, string> implements IQuotesPersistence {
 
     constructor() {
-        super(QuotesMongoDbPersistence.Descriptor, require('./QuoteModel'));
+        super('quotes', QuotesMongoDbSchema());
     }
     
-    private validateQuote(item) {
-        return _.pick(item, 'id', 'author', 'text', 'status', 'tags');
-    }
-    
-    private defineFilterCondition(filter: any) {
-        let filterCondition = _.pick(filter, 'author', 'status');
+    private composeFilter(filter: any) {
+        filter = filter || new FilterParams();
 
-        // Search by tags
-        if (filter.tags) {
-            let searchTags = TagsProcessor.compressTags(filter.tags);
-            filterCondition.all_tags = { $in: searchTags };
+        let criteria = [];
+
+        let search = filter.getAsNullableString('search');
+        if (search != null) {
+            let searchRegex = new RegExp(search, "i");
+            let searchCriteria = [];
+            searchCriteria.push({ source: { $regex: searchRegex } });
+            searchCriteria.push({ type: { $regex: searchRegex } });
+            searchCriteria.push({ 'text.en': { $regex: searchRegex } });
+            searchCriteria.push({ 'text.sp': { $regex: searchRegex } });
+            searchCriteria.push({ 'text.fr': { $regex: searchRegex } });
+            searchCriteria.push({ 'text.de': { $regex: searchRegex } });
+            searchCriteria.push({ 'text.ru': { $regex: searchRegex } });
+            searchCriteria.push({ 'author.en': { $regex: searchRegex } });
+            searchCriteria.push({ 'author.sp': { $regex: searchRegex } });
+            searchCriteria.push({ 'author.fr': { $regex: searchRegex } });
+            searchCriteria.push({ 'author.de': { $regex: searchRegex } });
+            searchCriteria.push({ 'author.ru': { $regex: searchRegex } });
+            criteria.push({ $or: searchCriteria });
         }
 
-        // Filter except ids
-        if (_.isString(filter.except_ids))
-            filter.except_ids = filter.except_ids.split(',');
-        if (_.isArray(filter.except_ids))
-            filterCondition._id = { $nin: filter.except_ids };
+        let id = filter.getAsNullableString('id');
+        if (id != null)
+            criteria.push({ _id: id });
 
-        return filterCondition;
+        // Search by tags
+        let tags = filter.getAsObject('tags');
+        if (tags) {
+            let searchTags = TagsProcessor.compressTags(tags);
+            criteria.push({ all_tags: { $in: searchTags } });
+        }
+
+        let author = filter.getAsNullableString('author');
+        if (author != null) {
+            let authorCriteria = [];
+            authorCriteria.push({ 'author.en': author });
+            authorCriteria.push({ 'author.fr': author });
+            authorCriteria.push({ 'author.sp': author });
+            authorCriteria.push({ 'author.de': author });
+            authorCriteria.push({ 'author.ru': author });
+            criteria.push({ $or: authorCriteria });
+        }
+
+        let status = filter.getAsNullableString('status');
+        if (status != null)
+            criteria.push({ status: status });
+
+        // Filter except ids
+        let exceptIds = filter.getAsObject('except_ids');
+        if (_.isString(exceptIds))
+            exceptIds = exceptIds.split(',');
+        if (_.isArray(exceptIds))
+            criteria.push({ _id: { $nin: exceptIds } });
+
+        return criteria.length > 0 ? { $and: criteria } : null;
     }
     
-    public getQuotes(correlationId: string, filter: FilterParams, paging: PagingParams, callback: any) {
-        let criteria = this.defineFilterCondition(filter);
-
-        this.getPage(correlationId, criteria, paging, null, null, callback);
+    public getPageByFilter(correlationId: string, filter: FilterParams, paging: PagingParams,
+        callback: (err: any, page: DataPage<QuoteV1>) => void): void {
+        super.getPageByFilter(correlationId, this.composeFilter(filter), paging, null, null, callback);
     }
 
-    public getRandomQuote(correlationId: string, filter: FilterParams, callback: any) {
-        let criteria = this.defineFilterCondition(filter);
-
-        this.getRandom(correlationId, criteria, callback);
+    public getOneRandom(correlationId: string, filter: FilterParams,
+        callback: (err: any, item: QuoteV1) => void): void {
+        super.getOneRandom(correlationId, this.composeFilter(filter), callback);
     }
 
-    public getQuoteById(correlationId: string, quoteId: string, callback: any) {
-        this.getById(correlationId, quoteId, callback);
-    }
-
-    public createQuote(correlationId: string, quote: any, callback: any) {
-        quote = this.validateQuote(quote);            
-        quote._id = quote.id || this.createUuid();
-        quote.all_tags = TagsProcessor.extractHashTags(quote, []);
-
-        this.create(correlationId, quote, callback);
-    }
-
-    public updateQuote(correlationId: string, quoteId: string, quote: any, callback: any) {
-        quote = this.validateQuote(quote);            
-
-        this._model.findById(
-            quoteId,
-            (err, item) => {
-                if (err || item == null) {
-                    callback(err, null);
-                    return;
-                }
-                
-                _.assign(item, quote);
-                item.all_tags = TagsProcessor.extractHashTags(quote, []);
-                
-                item.save((err) => {
-                    item = this.convertItem(item);
-                    callback(err, item);
-                });
-            }
-        );
-    }
-
-    public deleteQuote(correlationId: string, quoteId: string, callback) {
-        this.delete(correlationId, quoteId, callback);        
-    }
 }

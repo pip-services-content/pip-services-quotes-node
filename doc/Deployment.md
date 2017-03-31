@@ -34,7 +34,7 @@ To learn more about Seneca microservices framework to go http://senecajs.org
     ...
     "dependencies": {
         ....
-        "pip-services-quotes": "^1.0.*",
+        "pip-services-quotes-node": "^1.1.*",
         ...
     }
 }
@@ -60,24 +60,11 @@ var seneca = require('seneca')();
 
 var config = {
     logs: { 
-        descriptor: { type: 'console' }
-    },
-    counters: { 
-        descriptor: { type: 'log' }
+        level: 'debug'
     },
     persistence: {
-        descriptor: {
-            type: 'file',
-            group: 'pip-services-quotes'
-        },
-        options: {
-            path: 'quotes.json'
-        }
-    },
-    controllers: {
-        descriptor: {
-            group: 'pip-services-quotes'
-        }
+        type: 'file'
+        path: 'quotes.json'
     }
 };
 

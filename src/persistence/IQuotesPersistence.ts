@@ -1,12 +1,27 @@
-import { FilterParams } from 'pip-services-runtime-node';
-import { PagingParams } from 'pip-services-runtime-node';
-import { IPersistence } from 'pip-services-runtime-node';
+import { FilterParams } from 'pip-services-commons-node';
+import { PagingParams } from 'pip-services-commons-node';
+import { DataPage } from 'pip-services-commons-node';
+import { IGetter } from 'pip-services-data-node';
+import { IWriter } from 'pip-services-data-node';
 
-export interface IQuotesPersistence extends IPersistence {
-    getQuotes(correlationId: string, filter: FilterParams, paging: PagingParams, callback: any);
-    getRandomQuote(correlationId: string, filter: FilterParams, callback: any);
-    getQuoteById(correlationId: string, quoteId: string, callback: any);
-    createQuote(correlationId: string, quote: any, callback: any);
-    updateQuote(correlationId: string, quoteId: string, quote: any, callback: any);
-    deleteQuote(correlationId: string, quoteId: any, callback: any);
+import { QuoteV1 } from '../data/version1/QuoteV1';
+
+export interface IQuotesPersistence extends IGetter<QuoteV1, string>, IWriter<QuoteV1, string> {
+    getPageByFilter(correlationId: string, filter: FilterParams, paging: PagingParams, 
+        callback: (err: any, page: DataPage<QuoteV1>) => void): void;
+
+    getOneRandom(correlationId: string, filter: FilterParams, 
+        callback: (err: any, item: QuoteV1) => void): void;
+
+    getOneById(correlationId: string, id: string, 
+        callback: (err: any, item: QuoteV1) => void): void;
+
+    create(correlationId: string, item: QuoteV1, 
+        callback: (err: any, item: QuoteV1) => void): void;
+
+    update(correlationId: string, item: QuoteV1, 
+        callback: (err: any, item: QuoteV1) => void): void;
+
+    deleteById(correlationId: string, id: string,
+        callback: (err: any, item: QuoteV1) => void): void;
 }
