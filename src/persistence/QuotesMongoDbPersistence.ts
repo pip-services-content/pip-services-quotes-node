@@ -3,10 +3,10 @@ let _ = require('lodash');
 import { FilterParams } from 'pip-services-commons-node';
 import { PagingParams } from 'pip-services-commons-node';
 import { DataPage } from 'pip-services-commons-node';
+import { TagsProcessor } from 'pip-services-commons-node';
 import { IdentifiableMongoDbPersistence } from 'pip-services-data-node';
 
 import { QuoteV1 } from '../data/version1/QuoteV1';
-import { TagsProcessor } from '../data/TagsProcessor';
 import { IQuotesPersistence } from './IQuotesPersistence';
 import { QuotesMongoDbSchema } from './QuotesMongoDbSchema';
 

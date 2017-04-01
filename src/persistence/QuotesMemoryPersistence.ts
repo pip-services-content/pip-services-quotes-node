@@ -4,10 +4,10 @@ import { FilterParams } from 'pip-services-commons-node';
 import { PagingParams } from 'pip-services-commons-node';
 import { DataPage } from 'pip-services-commons-node';
 import { IdentifiableMemoryPersistence } from 'pip-services-data-node';
+import { TagsProcessor } from 'pip-services-commons-node';
 
 import { QuoteV1 } from '../data/version1/QuoteV1';
 import { IQuotesPersistence } from './IQuotesPersistence';
-import { TagsProcessor } from '../data/TagsProcessor';
 
 export class QuotesMemoryPersistence 
     extends IdentifiableMemoryPersistence<QuoteV1, string> 

@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 let _ = require('lodash');
 const pip_services_commons_node_1 = require("pip-services-commons-node");
+const pip_services_commons_node_2 = require("pip-services-commons-node");
 const pip_services_data_node_1 = require("pip-services-data-node");
-const TagsProcessor_1 = require("../data/TagsProcessor");
 const QuotesMongoDbSchema_1 = require("./QuotesMongoDbSchema");
 class QuotesMongoDbPersistence extends pip_services_data_node_1.IdentifiableMongoDbPersistence {
     constructor() {
@@ -36,7 +36,7 @@ class QuotesMongoDbPersistence extends pip_services_data_node_1.IdentifiableMong
         // Search by tags
         let tags = filter.getAsObject('tags');
         if (tags) {
-            let searchTags = TagsProcessor_1.TagsProcessor.compressTags(tags);
+            let searchTags = pip_services_commons_node_2.TagsProcessor.compressTags(tags);
             criteria.push({ all_tags: { $in: searchTags } });
         }
         let author = filter.getAsNullableString('author');

@@ -9,14 +9,13 @@ import { PagingParams } from 'pip-services-commons-node';
 import { DataPage } from 'pip-services-commons-node';
 import { ICommandable } from 'pip-services-commons-node';
 import { CommandSet } from 'pip-services-commons-node';
+import { TagsProcessor } from 'pip-services-commons-node';
 
 import { QuoteV1 } from '../data/version1/QuoteV1';
 import { QuoteStatusV1 } from '../data/version1/QuoteStatusV1';
 import { IQuotesPersistence } from '../persistence/IQuotesPersistence';
 import { IQuotesBusinessLogic } from './IQuotesBusinessLogic';
 import { QuotesCommandSet } from './QuotesCommandSet';
-
-import { TagsProcessor } from '../data/TagsProcessor';
 
 export class QuotesController implements  IConfigurable, IReferenceable, ICommandable, IQuotesBusinessLogic {
     private static _defaultConfig: ConfigParams = ConfigParams.fromTuples(

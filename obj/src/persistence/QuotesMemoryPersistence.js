@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let _ = require('lodash');
 const pip_services_commons_node_1 = require("pip-services-commons-node");
 const pip_services_data_node_1 = require("pip-services-data-node");
-const TagsProcessor_1 = require("../data/TagsProcessor");
+const pip_services_commons_node_2 = require("pip-services-commons-node");
 class QuotesMemoryPersistence extends pip_services_data_node_1.IdentifiableMemoryPersistence {
     constructor() {
         super();
@@ -55,7 +55,7 @@ class QuotesMemoryPersistence extends pip_services_data_node_1.IdentifiableMemor
         let exceptIds = filter.getAsObject('except_ids');
         // Process tags filter
         if (tags)
-            tags = TagsProcessor_1.TagsProcessor.compressTags(tags);
+            tags = pip_services_commons_node_2.TagsProcessor.compressTags(tags);
         // Process except ids filter
         if (_.isString(exceptIds))
             exceptIds = exceptIds.split(',');
