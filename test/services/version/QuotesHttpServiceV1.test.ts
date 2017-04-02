@@ -11,9 +11,9 @@ import { QuoteV1 } from '../../../src/data/version1/QuoteV1';
 import { QuoteStatusV1 } from '../../../src/data/version1/QuoteStatusV1';
 import { QuotesMemoryPersistence } from '../../../src/persistence/QuotesMemoryPersistence';
 import { QuotesController } from '../../../src/logic/QuotesController';
-import { QuotesRestServiceV1 } from '../../../src/services/version1/QuotesRestServiceV1';
+import { QuotesHttpServiceV1 } from '../../../src/services/version1/QuotesHttpServiceV1';
 
-let restConfig = ConfigParams.fromTuples(
+let httpConfig = ConfigParams.fromTuples(
     "connection.protocol", "http",
     "connection.host", "localhost",
     "connection.port", 3000
@@ -36,21 +36,21 @@ let QUOTE2: QuoteV1 = {
     all_tags: null
 };
 
-suite('QuotesRestServiceV1', ()=> {    
-    let service: QuotesRestServiceV1;
+suite('QuotesHttpServiceV1', ()=> {    
+    let service: QuotesHttpServiceV1;
     let rest: any;
 
     suiteSetup((done) => {
         let persistence = new QuotesMemoryPersistence();
         let controller = new QuotesController();
 
-        service = new QuotesRestServiceV1();
-        service.configure(restConfig);
+        service = new QuotesHttpServiceV1();
+        service.configure(httpConfig);
 
         let references: References = References.fromTuples(
             new Descriptor('pip-services-quotes', 'persistence', 'memory', 'default', '1.0'), persistence,
             new Descriptor('pip-services-quotes', 'controller', 'default', 'default', '1.0'), controller,
-            new Descriptor('pip-services-quotes', 'service', 'rest', 'default', '1.0'), service
+            new Descriptor('pip-services-quotes', 'service', 'http', 'default', '1.0'), service
         );
         controller.setReferences(references);
         service.setReferences(references);

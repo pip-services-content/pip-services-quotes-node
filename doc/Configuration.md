@@ -19,7 +19,7 @@ Example **config.yaml** file:
 
 - descriptor: "pip-services-quotes:controller:default:default:1.0"
 
-- descriptor: "pip-services-quotes:service:rest:default:1.0"
+- descriptor: "pip-services-quotes:service:http:default:1.0"
   connection:
     protocol: "http"
     host: "0.0.0.0"

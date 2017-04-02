@@ -59,7 +59,7 @@ See [Configuration Guide](Configuration.md) for details.
 var seneca = require('seneca')();
 
 var config = {
-    logs: { 
+    logger: { 
         level: 'debug'
     },
     persistence: {
@@ -68,8 +68,10 @@ var config = {
     }
 };
 
-seneca.use('pip-services-quotes', config);
+var plugin = new require('pip-services-quotes-node').QuotesSenecaPlugin;
+
+seneca.use(plugin, config);
 ```
 
 You can use the microservice by calling seneca commands directly as described in [Seneca Protocol](SenecaProtocolV1.md)
-or by using [QuotesSenecaClient](https://github.com/pip-services/pip-clients-quotes-node/doc/NodeClientApiV1.md/#client_seneca)
+or by using [QuotesSenecaClient](https://github.com/pip-services-content/pip-clients-quotes-node/doc/NodeClientApiV1.md/#client_seneca)

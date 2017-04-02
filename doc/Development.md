@@ -23,9 +23,6 @@ Then you need to configure node tools:
 # Install typescript compiler
 npm install typescript -g
  
-# Install typescript definitions utility
-npm install tsd -g 
-
 # Install mocha test runner
 npm install mocha -g
 ```

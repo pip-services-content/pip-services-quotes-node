@@ -5,7 +5,7 @@ import { QuotesMongoDbPersistence } from '../persistence/QuotesMongoDbPersistenc
 import { QuotesFilePersistence } from '../persistence/QuotesFilePersistence';
 import { QuotesMemoryPersistence } from '../persistence/QuotesMemoryPersistence';
 import { QuotesController } from '../logic/QuotesController';
-import { QuotesRestServiceV1 } from '../services/version1/QuotesRestServiceV1';
+import { QuotesHttpServiceV1 } from '../services/version1/QuotesHttpServiceV1';
 import { QuotesSenecaServiceV1 } from '../services/version1/QuotesSenecaServiceV1'; 
 
 export class QuotesFactory extends Factory {
@@ -15,7 +15,7 @@ export class QuotesFactory extends Factory {
 	public static MongoDbPersistenceDescriptor = new Descriptor("pip-services-quotes", "persistence", "mongodb", "*", "1.0");
 	public static ControllerDescriptor = new Descriptor("pip-services-quotes", "controller", "default", "*", "1.0");
 	public static SenecaServiceDescriptor = new Descriptor("pip-services-quotes", "service", "seneca", "*", "1.0");
-	public static RestServiceDescriptor = new Descriptor("pip-services-quotes", "service", "rest", "*", "1.0");
+	public static HttpServiceDescriptor = new Descriptor("pip-services-quotes", "service", "http", "*", "1.0");
 	
 	constructor() {
 		super();
@@ -24,7 +24,7 @@ export class QuotesFactory extends Factory {
 		this.registerAsType(QuotesFactory.MongoDbPersistenceDescriptor, QuotesMongoDbPersistence);
 		this.registerAsType(QuotesFactory.ControllerDescriptor, QuotesController);
 		this.registerAsType(QuotesFactory.SenecaServiceDescriptor, QuotesSenecaServiceV1);
-		this.registerAsType(QuotesFactory.RestServiceDescriptor, QuotesRestServiceV1);
+		this.registerAsType(QuotesFactory.HttpServiceDescriptor, QuotesHttpServiceV1);
 	}
 	
 }

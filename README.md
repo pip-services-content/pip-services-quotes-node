@@ -22,7 +22,7 @@ This microservice has no dependencies on other microservices.
   - [.NET SDK](https://github.com/pip-services/pip-clients-quotes-dotnet)
   - [Go SDK](https://github.com/pip-services/pip-clients-quotes-go)
 * Communication Protocols
-  - [HTTP/REST Version 1](doc/RestProtocolV1.md)
+  - [HTTP Version 1](doc/HttpProtocolV1.md)
   - [Seneca Version 1](doc/SenecaProtocolV1.md)
   - [Lambda Version 1](doc/LambdaProtocolV1.md)
 
@@ -30,7 +30,7 @@ This microservice has no dependencies on other microservices.
 
 Right now the only way to get the microservice is to check it out directly from github repository
 ```bash
-git clone git@github.com:pip-services-content/pip-services-quotes.git
+git clone git@github.com:pip-services-content/pip-services-quotes-node.git
 ```
 
 Pip.Service team is working to implement packaging and make stable releases available for your 
@@ -55,7 +55,7 @@ Example of microservice configuration
 
 - descriptor: "pip-services-quotes:controller:default:default:1.0"
 
-- descriptor: "pip-services-quotes:service:rest:default:1.0"
+- descriptor: "pip-services-quotes:service:http:default:1.0"
   connection:
     protocol: "http"
     host: "0.0.0.0"
@@ -106,7 +106,7 @@ var config = {
 Instantiate the client and open connection to the microservice
 ```javascript
 // Create the client instance
-var client = sdk.QuotesRestClientV1(config);
+var client = sdk.QuotesHttpClientV1(config);
 
 // Connect to the microservice
 client.open(null, function(err) {

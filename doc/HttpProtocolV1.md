@@ -1,6 +1,6 @@
-# HTTP REST Protocol (version 1) <br/> Quotes Microservice
+# HTTP Protocol (version 1) <br/> Quotes Microservice
 
-Quotes microservice implements a REST compatible API, that can be accessed on configured port.
+Quotes microservice implements a HTTP compatible API, that can be accessed on configured port.
 All input and output data is serialized in JSON format. Errors are returned in [standard format]().
 
 * [MultiStringV1 class](#class1)
