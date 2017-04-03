@@ -4,6 +4,7 @@ import { ConfigParams } from 'pip-services-commons-node';
 import { ConsoleLogger } from 'pip-services-commons-node';
 import { ConfigException } from 'pip-services-commons-node';
 import { SenecaPlugin } from 'pip-services-net-node';
+import { SenecaInstance } from 'pip-services-net-node';
 
 import { QuotesMemoryPersistence } from '../persistence/QuotesMemoryPersistence';
 import { QuotesFilePersistence } from '../persistence/QuotesFilePersistence';
@@ -13,10 +14,10 @@ import { QuotesSenecaServiceV1 } from '../services/version1/QuotesSenecaServiceV
 
 export class QuotesSenecaPlugin extends SenecaPlugin {
     public constructor(seneca: any, options: any) {
-        super('pip-services-quotes', seneca, QuotesSenecaPlugin.createReferences(options));
+        super('pip-services-quotes', seneca, QuotesSenecaPlugin.createReferences(seneca, options));
     }
 
-    private static createReferences(options: any): References {
+    private static createReferences(seneca: any, options: any): References {
         options = options || {};
 
         let logger = new ConsoleLogger();
@@ -38,12 +39,15 @@ export class QuotesSenecaPlugin extends SenecaPlugin {
             throw new ConfigException(null, 'WRONG_PERSISTENCE_TYPE', 'Unrecognized persistence type: ' + persistenceType);
         persistence.configure(ConfigParams.fromValue(persistenceOptions));
 
+        let senecaInstance = new SenecaInstance(seneca);
+
         let service = new QuotesSenecaServiceV1();
         let serviceOptions = options.service || {};
         service.configure(ConfigParams.fromValue(serviceOptions));
 
         return References.fromTuples(
             new Descriptor('pip-services-commons', 'logger', 'console', 'default', '1.0'), logger,
+            new Descriptor('pip-services-net', 'seneca', 'instance', 'default', '1.0'), senecaInstance,
             new Descriptor('pip-services-quotes', 'persistence', persistenceType, 'default', '1.0'), persistence,
             new Descriptor('pip-services-quotes', 'controller', 'default', 'default', '1.0'), controller,
             new Descriptor('pip-services-quotes', 'service', 'seneca', 'default', '1.0'), service
