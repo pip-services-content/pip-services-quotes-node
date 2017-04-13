@@ -1,5 +1,5 @@
 #Base image from Docker hub
-FROM node:0.12.7
+FROM node:latest
 
 #Create work directory
 RUN mkdir -p /usr/src/app
@@ -12,7 +12,7 @@ COPY ./data /usr/src/app/data
 RUN mkdir -p /usr/src/app/logs
 
 #Add/link binary files to avoid copying
-ADD ./lib /usr/src/app/lib
+ADD ./obj /usr/src/app/obj
 ADD ./node_modules /usr/src/app/node_modules
 
 #Give execution privilegies to Start/Stop command files

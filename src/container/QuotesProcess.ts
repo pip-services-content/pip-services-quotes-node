@@ -5,15 +5,10 @@ import { QuotesFactory } from '../build/QuotesFactory';
 
 export class QuotesProcess extends ProcessContainer {
 
-    protected initReferences(references: IReferences): void {
-        super.initReferences(references);
-
-        // Factory to statically resolve Quotes components
-        references.put(QuotesFactory.Descriptor, new QuotesFactory());
+    public constructor() {
+        super("quotes", "Inspirational quotes microservice");
+        this._factories.add(new QuotesFactory);
     }
 
-    public runWithArguments(args: string[]): void {
-        return this.runWithArgumentsOrConfigFile("quotes", args, "./config/config.yaml");
-    }
 
 }

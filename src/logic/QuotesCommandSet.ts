@@ -5,8 +5,13 @@ import { Schema } from 'pip-services-commons-node';
 import { Parameters } from 'pip-services-commons-node';
 import { FilterParams } from 'pip-services-commons-node';
 import { PagingParams } from 'pip-services-commons-node';
+import { ObjectSchema } from 'pip-services-commons-node';
+import { TypeCode } from 'pip-services-commons-node';
+import { FilterParamsSchema } from 'pip-services-commons-node';
+import { PagingParamsSchema } from 'pip-services-commons-node';
 
 import { QuoteV1 } from '../data/version1/QuoteV1';
+import { QuoteV1Schema } from '../data/version1/QuoteV1Schema';
 import { IQuotesBusinessLogic } from './IQuotesBusinessLogic';
 
 export class QuotesCommandSet extends CommandSet {
@@ -29,7 +34,9 @@ export class QuotesCommandSet extends CommandSet {
 	private makeGetQuotesCommand(): ICommand {
 		return new Command(
 			"get_quotes",
-			null,
+			new ObjectSchema(true)
+				.withOptionalProperty('filter', new FilterParamsSchema())
+				.withOptionalProperty('paging', new PagingParamsSchema()),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let filter = FilterParams.fromValue(args.get("filter"));
                 let paging = PagingParams.fromValue(args.get("paging"));
@@ -41,7 +48,8 @@ export class QuotesCommandSet extends CommandSet {
 	private makeGetRandomQuoteCommand(): ICommand {
 		return new Command(
 			"get_random_quote",
-			null,
+			new ObjectSchema(true)
+				.withOptionalProperty('filter', new FilterParamsSchema()),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let filter = FilterParams.fromValue(args.get("filter"));
                 this._logic.getRandomQuote(correlationId, filter, callback);
@@ -52,7 +60,8 @@ export class QuotesCommandSet extends CommandSet {
 	private makeGetQuoteByIdCommand(): ICommand {
 		return new Command(
 			"get_quote_by_id",
-			null,
+			new ObjectSchema(true)
+				.withRequiredProperty('quote_id', TypeCode.String),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let quote_id = args.getAsString("quote_id");
                 this._logic.getQuoteById(correlationId, quote_id, callback);
@@ -63,7 +72,8 @@ export class QuotesCommandSet extends CommandSet {
 	private makeCreateQuoteCommand(): ICommand {
 		return new Command(
 			"create_quote",
-			null,
+			new ObjectSchema(true)
+				.withRequiredProperty('quote', new QuoteV1Schema()),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let quote = args.get("quote");
                 this._logic.createQuote(correlationId, quote, callback);
@@ -74,7 +84,8 @@ export class QuotesCommandSet extends CommandSet {
 	private makeUpdateQuoteCommand(): ICommand {
 		return new Command(
 			"update_quote",
-			null,
+			new ObjectSchema(true)
+				.withRequiredProperty('quote', new QuoteV1Schema()),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let quote = args.get("quote");
                 this._logic.updateQuote(correlationId, quote, callback);
@@ -85,7 +96,8 @@ export class QuotesCommandSet extends CommandSet {
 	private makeDeleteQuoteByIdCommand(): ICommand {
 		return new Command(
 			"delete_quote_by_id",
-			null,
+			new ObjectSchema(true)
+				.withRequiredProperty('quote_id', TypeCode.String),
             (correlationId: string, args: Parameters, callback: (err: any, result: any) => void) => {
                 let quoteId = args.getAsNullableString("quote_id");
                 this._logic.deleteQuoteById(correlationId, quoteId, callback);
