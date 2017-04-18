@@ -32,14 +32,6 @@ Logical contract of the microservice is presented below. For physical implementa
 please, refer to documentation of the specific protocol.
 
 ```typescript
-class QuoteStatusV1 {
-    public static readonly New = "new";
-    public static readonly Writing = "writing";
-    public static readonly Translating = "translating";
-    public static readonly Verifying = "verifying";
-    public static readonly Completed = "completed";
-}
-
 class QuoteV1 implements IStringIdentifiable {
     public id: string;
     public text: MultiString;
@@ -47,6 +39,14 @@ class QuoteV1 implements IStringIdentifiable {
     public status: string;
     public tags: string[];
     public all_tags: string[];
+}
+
+class QuoteStatusV1 {
+    public static readonly New = "new";
+    public static readonly Writing = "writing";
+    public static readonly Translating = "translating";
+    public static readonly Verifying = "verifying";
+    public static readonly Completed = "completed";
 }
 
 interface IQuotesBusinessLogic {
