@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
 		{
+			"type": "node",
+			"request": "launch",
+			"name": "Launch container",
+			"program": "${workspaceRoot}/bin/run.js"
+		},
+		{
 			// Name of configuration; appears in the launch configuration drop down menu.
 			"name": "Run mocha",
 			// Type of configuration. Possible values: "node", "mono".
