@@ -21,7 +21,7 @@ ADD ./node_modules /usr/src/app/node_modules
 RUN chmod +x /usr/src/app/bin/run
 
 #Expose
-EXPOSE  80002
+EXPOSE  8080
 
 #Define entry point
 ENTRYPOINT [ "bin/run" ]

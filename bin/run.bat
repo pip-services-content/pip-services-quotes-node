@@ -7,9 +7,9 @@ TITLE Quotes Microservice
 SET OLDDIR=%CD%
 SET CURRDIR=%~dp0
 
-CD /d %CURRDIR%
+CD /d %CURRDIR%\..
 
-node run.js %1
+node ./bin/run.js -c ./config/config.yaml
 
 CD /d %OLDDIR%
 

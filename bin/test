@@ -1,0 +1,5 @@
+#! /bin/sh
+
+curl -H "Content-Type: application/json" -X POST -d '{ "text": { "en": "Work is not a wolf, it will not run away"}, "author": { "en": "Russian proverb" }, "status": "completed" }' http://0.0.0.0:32769/quotes/create_quote
+
+curl -H "Content-Type: application/json" -X POST -d '' http://0.0.0.0:32770/quotes/get_random_quote
