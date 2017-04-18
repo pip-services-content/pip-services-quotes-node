@@ -26,6 +26,50 @@ This microservice has no dependencies on other microservices.
   - [Seneca Version 1](doc/SenecaProtocolV1.md)
   - [Lambda Version 1](doc/LambdaProtocolV1.md)
 
+## Contract
+
+Logical contract of the microservice is presented below. For physical implementation (HTTP/REST, Thrift, Seneca, Lambda, etc.),
+please, refer to documentation of the specific protocol.
+
+```typescript
+class QuoteStatusV1 {
+    public static readonly New = "new";
+    public static readonly Writing = "writing";
+    public static readonly Translating = "translating";
+    public static readonly Verifying = "verifying";
+    public static readonly Completed = "completed";
+}
+
+class QuoteV1 implements IStringIdentifiable {
+    public id: string;
+    public text: MultiString;
+    public author: MultiString;
+    public status: string;
+    public tags: string[];
+    public all_tags: string[];
+}
+
+interface IQuotesBusinessLogic {
+    getQuotes(correlationId: string, filter: FilterParams, paging: PagingParams, 
+        callback: (err: any, page: DataPage<QuoteV1>) => void): void;
+
+    getRandomQuote(correlationId: string, filter: FilterParams, 
+        callback: (err: any, quote: QuoteV1) => void): void;
+
+    getQuoteById(correlationId: string, quote_id: string, 
+        callback: (err: any, quote: QuoteV1) => void): void;
+
+    createQuote(correlationId: string, quote: QuoteV1, 
+        callback: (err: any, quote: QuoteV1) => void): void;
+
+    updateQuote(correlationId: string, quote: QuoteV1, 
+        callback: (err: any, quote: QuoteV1) => void): void;
+
+    deleteQuoteById(correlationId: string, quote_id: string,
+        callback: (err: any, quote: QuoteV1) => void): void;
+}
+```
+
 ## Download
 
 Right now the only way to get the microservice is to check it out directly from github repository
