@@ -49,7 +49,7 @@ class QuoteStatusV1 {
     public static readonly Completed = "completed";
 }
 
-interface IQuotesBusinessLogic {
+interface IQuotesV1 {
     getQuotes(correlationId: string, filter: FilterParams, paging: PagingParams, 
         callback: (err: any, page: DataPage<QuoteV1>) => void): void;
 
