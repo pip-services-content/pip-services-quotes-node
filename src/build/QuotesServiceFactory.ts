@@ -8,7 +8,7 @@ import { QuotesController } from '../logic/QuotesController';
 import { QuotesHttpServiceV1 } from '../services/version1/QuotesHttpServiceV1';
 import { QuotesSenecaServiceV1 } from '../services/version1/QuotesSenecaServiceV1'; 
 
-export class QuotesFactory extends Factory {
+export class QuotesServiceFactory extends Factory {
 	public static Descriptor = new Descriptor("pip-services-quotes", "factory", "default", "default", "1.0");
 	public static MemoryPersistenceDescriptor = new Descriptor("pip-services-quotes", "persistence", "memory", "*", "1.0");
 	public static FilePersistenceDescriptor = new Descriptor("pip-services-quotes", "persistence", "file", "*", "1.0");
@@ -19,12 +19,12 @@ export class QuotesFactory extends Factory {
 	
 	constructor() {
 		super();
-		this.registerAsType(QuotesFactory.MemoryPersistenceDescriptor, QuotesMemoryPersistence);
-		this.registerAsType(QuotesFactory.FilePersistenceDescriptor, QuotesFilePersistence);
-		this.registerAsType(QuotesFactory.MongoDbPersistenceDescriptor, QuotesMongoDbPersistence);
-		this.registerAsType(QuotesFactory.ControllerDescriptor, QuotesController);
-		this.registerAsType(QuotesFactory.SenecaServiceDescriptor, QuotesSenecaServiceV1);
-		this.registerAsType(QuotesFactory.HttpServiceDescriptor, QuotesHttpServiceV1);
+		this.registerAsType(QuotesServiceFactory.MemoryPersistenceDescriptor, QuotesMemoryPersistence);
+		this.registerAsType(QuotesServiceFactory.FilePersistenceDescriptor, QuotesFilePersistence);
+		this.registerAsType(QuotesServiceFactory.MongoDbPersistenceDescriptor, QuotesMongoDbPersistence);
+		this.registerAsType(QuotesServiceFactory.ControllerDescriptor, QuotesController);
+		this.registerAsType(QuotesServiceFactory.SenecaServiceDescriptor, QuotesSenecaServiceV1);
+		this.registerAsType(QuotesServiceFactory.HttpServiceDescriptor, QuotesHttpServiceV1);
 	}
 	
 }

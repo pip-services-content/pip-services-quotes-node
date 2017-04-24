@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const pip_services_commons_node_1 = require("pip-services-commons-node");
 const pip_services_aws_node_1 = require("pip-services-aws-node");
-const QuotesFactory_1 = require("../build/QuotesFactory");
+const QuotesServiceFactory_1 = require("../build/QuotesServiceFactory");
 class QuotesLambdaFunction extends pip_services_aws_node_1.CommandableLambdaFunction {
     constructor() {
         super("quotes", "Inspirational quotes function");
         this._dependencyResolver.put('controller', new pip_services_commons_node_1.Descriptor('pip-services-quotes', 'controller', 'default', '*', '*'));
-        this._factories.add(new QuotesFactory_1.QuotesFactory());
+        this._factories.add(new QuotesServiceFactory_1.QuotesServiceFactory());
     }
 }
 exports.QuotesLambdaFunction = QuotesLambdaFunction;

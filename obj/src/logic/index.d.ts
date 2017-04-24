@@ -1,2 +1,2 @@
-export { IQuotesBusinessLogic } from './IQuotesBusinessLogic';
+export { IQuotesController } from './IQuotesController';
 export { QuotesController } from './QuotesController';

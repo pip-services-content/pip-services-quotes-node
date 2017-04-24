@@ -14,10 +14,10 @@ import { TagsProcessor } from 'pip-services-commons-node';
 import { QuoteV1 } from '../data/version1/QuoteV1';
 import { QuoteStatusV1 } from '../data/version1/QuoteStatusV1';
 import { IQuotesPersistence } from '../persistence/IQuotesPersistence';
-import { IQuotesBusinessLogic } from './IQuotesBusinessLogic';
+import { IQuotesController } from './IQuotesController';
 import { QuotesCommandSet } from './QuotesCommandSet';
 
-export class QuotesController implements  IConfigurable, IReferenceable, ICommandable, IQuotesBusinessLogic {
+export class QuotesController implements  IConfigurable, IReferenceable, ICommandable, IQuotesController {
     private static _defaultConfig: ConfigParams = ConfigParams.fromTuples(
         'dependencies.persistence', 'pip-services-quotes:persistence:*:*:1.0'
     );

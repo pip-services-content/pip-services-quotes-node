@@ -8,8 +8,8 @@ import { DataPage } from 'pip-services-commons-node';
 import { ICommandable } from 'pip-services-commons-node';
 import { CommandSet } from 'pip-services-commons-node';
 import { QuoteV1 } from '../data/version1/QuoteV1';
-import { IQuotesBusinessLogic } from './IQuotesBusinessLogic';
-export declare class QuotesController implements IConfigurable, IReferenceable, ICommandable, IQuotesBusinessLogic {
+import { IQuotesController } from './IQuotesController';
+export declare class QuotesController implements IConfigurable, IReferenceable, ICommandable, IQuotesController {
     private static _defaultConfig;
     private _dependencyResolver;
     private _persistence;

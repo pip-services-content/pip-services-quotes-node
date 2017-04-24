@@ -1,1 +1,1 @@
-export { QuotesFactory } from './QuotesFactory';
+export { QuotesServiceFactory } from './QuotesServiceFactory';

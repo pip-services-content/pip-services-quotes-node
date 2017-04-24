@@ -12,12 +12,12 @@ import { PagingParamsSchema } from 'pip-services-commons-node';
 
 import { QuoteV1 } from '../data/version1/QuoteV1';
 import { QuoteV1Schema } from '../data/version1/QuoteV1Schema';
-import { IQuotesBusinessLogic } from './IQuotesBusinessLogic';
+import { IQuotesController } from './IQuotesController';
 
 export class QuotesCommandSet extends CommandSet {
-    private _logic: IQuotesBusinessLogic;
+    private _logic: IQuotesController;
 
-    constructor(logic: IQuotesBusinessLogic) {
+    constructor(logic: IQuotesController) {
         super();
 
         this._logic = logic;

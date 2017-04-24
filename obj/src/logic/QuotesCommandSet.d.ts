@@ -1,8 +1,8 @@
 import { CommandSet } from 'pip-services-commons-node';
-import { IQuotesBusinessLogic } from './IQuotesBusinessLogic';
+import { IQuotesController } from './IQuotesController';
 export declare class QuotesCommandSet extends CommandSet {
     private _logic;
-    constructor(logic: IQuotesBusinessLogic);
+    constructor(logic: IQuotesController);
     private makeGetQuotesCommand();
     private makeGetRandomQuoteCommand();
     private makeGetQuoteByIdCommand();

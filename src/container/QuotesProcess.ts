@@ -1,13 +1,13 @@
 import { IReferences } from 'pip-services-commons-node';
 import { ProcessContainer } from 'pip-services-container-node';
 
-import { QuotesFactory } from '../build/QuotesFactory';
+import { QuotesServiceFactory } from '../build/QuotesServiceFactory';
 
 export class QuotesProcess extends ProcessContainer {
 
     public constructor() {
         super("quotes", "Inspirational quotes microservice");
-        this._factories.add(new QuotesFactory);
+        this._factories.add(new QuotesServiceFactory);
     }
 
 

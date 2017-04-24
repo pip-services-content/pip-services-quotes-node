@@ -1,5 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var QuotesFactory_1 = require("./QuotesFactory");
-exports.QuotesFactory = QuotesFactory_1.QuotesFactory;
+var QuotesServiceFactory_1 = require("./QuotesServiceFactory");
+exports.QuotesServiceFactory = QuotesServiceFactory_1.QuotesServiceFactory;
 //# sourceMappingURL=index.js.map
