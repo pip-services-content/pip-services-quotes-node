@@ -21,7 +21,7 @@ export let QuotesMongoDbSchema = function(collection?: string) {
             all_tags: { type: [String], required: false, index: true }
         },
         {
-            collection: 'quotes',
+            collection: collection,
             autoIndex: true
         }
     );

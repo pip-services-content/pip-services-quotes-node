@@ -16,7 +16,7 @@ exports.QuotesMongoDbSchema = function (collection) {
         tags: { type: [String], required: false },
         all_tags: { type: [String], required: false, index: true }
     }, {
-        collection: 'quotes',
+        collection: collection,
         autoIndex: true
     });
     schema.set('toJSON', {
