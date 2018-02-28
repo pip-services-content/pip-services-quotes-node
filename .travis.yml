@@ -7,5 +7,5 @@ node_js:
 scripts:
   - ./build.sh
   - ./package.sh
-  - ./test.sh
+#  - ./test.sh
   - ./publish.sh
