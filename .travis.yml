@@ -3,4 +3,4 @@ sudo: false
 node_js:
   - "node"
 install:
-  - build.sh
+  - ./build.sh
