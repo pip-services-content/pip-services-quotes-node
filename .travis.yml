@@ -1,6 +1,11 @@
 language: node_js
-sudo: false
+sudo: true
 node_js:
   - "node"
-install:
+#install:
+#  - ./build.sh
+scripts:
   - ./build.sh
+  - ./package.sh
+  - ./test.sh
+  - ./publish.sh
