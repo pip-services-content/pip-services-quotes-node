@@ -1,3 +1,0 @@
-#! /bin/sh
-
-cd `dirname $0`/.. && node ./bin/run.js -c ./config/config.yaml && cd -

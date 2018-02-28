@@ -2,8 +2,6 @@
 /node_modules
 /npm-debug.log
 /.idea
-/config/config.yaml
-/config/test_connections.yaml
 /data/quotes.test.json
 /data/quotes.json
 /obj/test

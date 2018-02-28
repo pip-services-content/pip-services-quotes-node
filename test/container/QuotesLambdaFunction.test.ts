@@ -50,7 +50,7 @@ suite('QuotesLambdaFunction', ()=> {
     });
     
     test('CRUD Operations', (done) => {
-        var quote1, quote2;
+        var quote1, quote2: QuoteV1;
 
         async.series([
         // Create one quote
