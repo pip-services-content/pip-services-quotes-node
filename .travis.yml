@@ -21,5 +21,8 @@ install:
 
 script: echo "npm test temporarily disabled"
 
+after_success:
+  - sed -i -e 's/BUILD_NUMBER=[0-9]*-rc/BUILD_NUMBER=${TRAVIS_BUILD_NUMBER }-rc/g' ./deploy_scripts/upgrade-stage.sh
+
 after_script:
   - ./clean.sh
