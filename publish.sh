@@ -10,6 +10,10 @@ TAG="v${VERSION}-${TRAVIS_BUILD_NUMBER}"
 set -e
 set -o pipefail
 
+# Configure git
+git config user.email ${GIT_EMAIL}
+git config user.name ${GIT_USER}
+
 # Set tag on git repo
 git tag $TAG
 git push --tags
