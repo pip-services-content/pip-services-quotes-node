@@ -24,13 +24,15 @@ script: echo "npm test temporarily disabled"
 after_success:
   - sed -i -e 's/BUILD_NUMBER=[0-9]*-rc/BUILD_NUMBER=${TRAVIS_BUILD_NUMBER }-rc/g' ./deploy_scripts/upgrade-stage.sh
   - git config --global user.email "krdima92@gmail.com"
-  -  git config --global user.name "stee1"
+  - git config --global user.name "stee1"
   - eval "$(ssh-agent -s)" #start the ssh agent
   - chmod 600 .travis/deploy_key.pem # this key should have push access
-  - ssh-add .travis/deploy_key.pem
-  - git add ./deploy_scripts/upgrade-stage.sh
-  - git commit -m "updated build version"
-  - git push origin master
+  - git remote add deploy DEPLOY_REPO_URI_GOES_HERE
+  - git push deploy
+#  - ssh-add .travis/deploy_key.pem
+#  - git add ./deploy_scripts/upgrade-stage.sh
+#  - git commit -m "updated build version"
+#  - git push origin master
 
 after_script:
   - ./clean.sh
