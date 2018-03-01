@@ -8,10 +8,12 @@ env:
   GIT_USER=stee1
   GIT_EMAIL="krdima92@gmail.com"
   DOCKER_USER=krdmitriy
-  DOCKER_PASS=9ZoxrZUhdu
+#  DOCKER_PASS=9ZoxrZUhdu
 before_install:
   - ./build.sh
 install:
   - ./test.sh
   - ./package.sh
   - ./publish.sh
+after_success:
+  - ./clean.sh

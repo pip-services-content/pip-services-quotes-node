@@ -19,7 +19,8 @@ git config user.name ${GIT_USER}
 #git push --tags
 
 # Push production image to docker registry
-docker login -u $DOCKER_USER -p $DOCKER_PASS
+#docker login -u $DOCKER_USER -p $DOCKER_PASS
+cat docker/my_password.txt | docker login --username $DOCKER_USER --password-stdin
 docker push $IMAGE1
 docker push $IMAGE2
 
