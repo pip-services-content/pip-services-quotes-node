@@ -2,19 +2,25 @@ language: node_js
 sudo: true
 node_js:
   - "node"
+
 services:
   - mongodb
+
 env:
   GIT_USER=stee1
   GIT_EMAIL="krdima92@gmail.com"
   DOCKER_USER=krdmitriy
-#  DOCKER_PASS=9ZoxrZUhdu
+
 before_install:
-  - npm install
+#  - npm install
   - ./build.sh
+
 install:
   - ./test.sh
   - ./package.sh
   - ./publish.sh
+
+script: echo "npm test temporarily disabled"
+
 after_script:
   - ./clean.sh
