@@ -4,7 +4,7 @@ COMPONENT=$(grep -m1 name package.json | tr -d '\r' | awk -F: '{ print $2 }' | s
 VERSION=$(grep -m1 version package.json | tr -d '\r' | awk -F: '{ print $2 }' | sed 's/[", ]//g')
 BUILD_IMAGE="pipdevs/${COMPONENT}:${VERSION}-${TRAVIS_BUILD_NUMBER}-build"
 TEST_IMAGE="pipdevs/${COMPONENT}:${VERSION}-${TRAVIS_BUILD_NUMBER}-test"
-IMAGE1="pipdevs/${COMPONENT}:${VERSION}-${TRAVIS_BUILD_NUMBER}"
+IMAGE1="pipdevs/${COMPONENT}:${VERSION}-${TRAVIS_BUILD_NUMBER}-rc"
 IMAGE2="pipdevs/${COMPONENT}:latest"
 
 rm -rf ./node_modules
