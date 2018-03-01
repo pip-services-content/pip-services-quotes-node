@@ -12,7 +12,6 @@ env:
   DOCKER_USER=krdmitriy
 
 before_install:
-#  - npm install
   - ./build.sh
 
 install:
