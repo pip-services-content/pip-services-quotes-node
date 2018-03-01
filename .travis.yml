@@ -10,6 +10,7 @@ env:
   DOCKER_USER=krdmitriy
 #  DOCKER_PASS=9ZoxrZUhdu
 before_install:
+  - npm install
   - ./build.sh
 install:
   - ./test.sh
