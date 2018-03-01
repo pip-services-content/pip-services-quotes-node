@@ -5,6 +5,9 @@ node_js:
 services:
   - mongodb
 env:
+  GIT_USERNAME=stee1
+  GIT_PASSWORD=cdl12MT$
+  GH_TOKEN=vVawjAvm95Ur5x3UI-LSvQ
   DOCKER_USER=krdmitriy
   DOCKER_PASS=9ZoxrZUhdu
 before_install:
