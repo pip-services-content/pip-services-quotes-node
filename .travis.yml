@@ -15,5 +15,5 @@ install:
   - ./test.sh
   - ./package.sh
   - ./publish.sh
-after_success:
+after_script:
   - ./clean.sh
