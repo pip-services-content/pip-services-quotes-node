@@ -4,6 +4,9 @@ node_js:
   - "node"
 services:
   - mongodb
+env:
+  DOCKER_USER=krdmitriy
+  DOCKER_PASS=9ZoxrZUhdu
 before_install:
   - ./build.sh
 install:

@@ -2,9 +2,9 @@
 
 COMPONENT=$(grep -m1 name package.json | tr -d '\r' | awk -F: '{ print $2 }' | sed 's/[", ]//g')
 VERSION=$(grep -m1 version package.json | tr -d '\r' | awk -F: '{ print $2 }' | sed 's/[", ]//g')
-IMAGE1="pipdevs/${COMPONENT}:${VERSION}-${BUILD_NUMBER-0}"
+IMAGE1="pipdevs/${COMPONENT}:${VERSION}-${TRAVIS_BUILD_NUMBER}"
 IMAGE2="pipdevs/${COMPONENT}:latest"
-TAG="v${VERSION}-${BUILD_NUMBER-0}"
+TAG="v${VERSION}-${TRAVIS_BUILD_NUMBER}"
 
 # Any subsequent(*) commands which fail will cause the shell scrupt to exit immediately
 set -e

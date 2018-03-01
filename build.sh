@@ -2,7 +2,7 @@
 
 COMPONENT=$(grep -m1 name package.json | tr -d '\r' | awk -F: '{ print $2 }' | sed 's/[", ]//g')
 VERSION=$(grep -m1 version package.json | tr -d '\r' | awk -F: '{ print $2 }' | sed 's/[", ]//g')
-IMAGE="pipdevs/${COMPONENT}:${VERSION}-${BUILD_NUMBER-0}-build"
+IMAGE="pipdevs/${COMPONENT}:${VERSION}-${TRAVIS_BUILD_NUMBER}-build"
 CONTAINER="${COMPONENT}"
 
 # Any subsequent(*) commands which fail will cause the shell scrupt to exit immediately
