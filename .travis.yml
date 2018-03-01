@@ -6,7 +6,7 @@ services:
   - mongodb
 before_install:
   - ./build.sh
-scripts:
+install:
   - ./package.sh
 #  - ./test.sh
   - ./publish.sh
