@@ -9,9 +9,11 @@ env:
   GIT_EMAIL="krdima92@gmail.com"
   DOCKER_USER=krdmitriy
   DOCKER_PASS=9ZoxrZUhdu
+  global:
+    secure: vVawjAvm95Ur5x3UI-LSvQ
 before_install:
   - ./build.sh
 install:
+  - ./test.sh
   - ./package.sh
-#  - ./test.sh
   - ./publish.sh
