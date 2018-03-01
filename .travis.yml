@@ -30,7 +30,7 @@ after_success:
 #  - git push deploy
   - git add ./deploy_scripts/upgrade-stage.sh
   - git commit -m "updated build version"
-  - git push
+  - git push origin master
 
 after_script:
   - ./clean.sh
