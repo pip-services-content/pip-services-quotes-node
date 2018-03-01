@@ -7,8 +7,8 @@ services:
   - mongodb
 
 env:
-  GIT_USER=stee1
-  GIT_EMAIL=krdima92@gmail.com
+#  GIT_USER=stee1
+#  GIT_EMAIL=krdima92@gmail.com
   DOCKER_USER=krdmitriy
 
 before_install:

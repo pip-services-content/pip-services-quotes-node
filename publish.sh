@@ -15,8 +15,8 @@ git config user.email ${GIT_EMAIL}
 git config user.name ${GIT_USER}
 
 # Set tag on git repo
-git tag $TAG
-git push --tags
+#git tag $TAG
+#git push --tags
 
 # Push production image to docker registry
 #docker login -u $DOCKER_USER -p $DOCKER_PASS
