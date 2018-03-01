@@ -2,6 +2,8 @@ language: node_js
 sudo: true
 node_js:
   - "node"
+services:
+  - mongodb
 before_install:
   - ./build.sh
 scripts:
