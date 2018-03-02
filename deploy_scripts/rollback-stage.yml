@@ -1,0 +1,10 @@
+---
+- name: Rollback stage {{ COMPONENT }}
+  hosts: stage
+  gather_facts: False
+  become_user: root
+  become_method: sudo
+  
+  tasks:
+    - name: Rollback to previous revision
+      raw: kubectl rollout undo deployment {{ COMPONENT }}-deploy --to-revision=$(kubectl rollout history deployment {{ COMPONENT }}-deploy | tail -n 3 | head -n 1 | sed 's/[^0-9]//g')
