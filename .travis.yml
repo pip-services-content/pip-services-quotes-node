@@ -20,6 +20,7 @@ install:
 script: echo "npm test temporarily disabled"
 
 after_success:
+  - chmod +x upgrade_git.sh
   - ./update_git.sh
 
 after_script:
