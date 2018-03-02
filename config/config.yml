@@ -7,35 +7,35 @@
 - descriptor: "pip-services-commons:counters:log:default:1.0"
   level: "trace"
 
-{{#MEMORY_ENABLED}}
+{{#if MEMORY_ENABLED}}
 # In-memory persistence. Use only for testing!
 - descriptor: "pip-services-quotes:persistence:memory:default:1.0"
-{{/MEMORY_ENABLED}}
+{{/if}}
 
-{{#FILE_ENABLED}}
+{{#if FILE_ENABLED}}
 # File persistence. Use it for testing of for simple standalone deployments
 - descriptor: "pip-services-quotes:persistence:file:default:1.0"
-  path: {{FILE_PATH}}{{^FILE_PATH}}"../data/quotes.json"{{/FILE_PATH}}
-{{/FILE_ENABLED}}
+  path: {{FILE_PATH}}{{#unless FILE_PATH}}"../data/quotes.json"{{/unless}}
+{{/if}}
 
-{{#MONGO_ENABLED}}
+{{#if MONGO_ENABLED}}
 # MongoDB Persistence
 - descriptor: "pip-services-quotes:persistence:mongodb:default:1.0"
-  collection: {{MONGO_COLLECTION}}{{^MONGO_COLLECTION}}quotes{{/MONGO_COLLECTION}}
+  collection: {{MONGO_COLLECTION}}{{#unless MONGO_COLLECTION}}quotes{{/unless}}
   connection:
     uri: {{MONGO_SERVICE_URI}}
-    host: {{MONGO_SERVICE_HOST}}{{^MONGO_SERVICE_HOST}}localhost{{/MONGO_SERVICE_HOST}}
-    port: {{MONGO_SERVICE_PORT}}{{^MONGO_SERVICE_PORT}}27017{{/MONGO_SERVICE_PORT}}
-    database: {{MONGO_DB}}{{^MONGO_DB}}app{{/MONGO_DB}}
+    host: {{MONGO_SERVICE_HOST}}{{#unless MONGO_SERVICE_HOST}}localhost{{/unless}}
+    port: {{MONGO_SERVICE_PORT}}{{#unless MONGO_SERVICE_PORT}}27017{{/unless}}
+    database: {{MONGO_DB}}{{#unless MONGO_DB}}app{{/unless}}
   credential:
     username: {{MONGO_USER}}
     password: {{MONGO_PASS}}
-{{/MONGO_ENABLED}}
+{{/if}}
 
-{{^MEMORY_ENABLED}}{{^FILE_ENABLED}}{{^MONGO_ENABLED}}
+{{#unless MEMORY_ENABLED}}{{#unless FILE_ENABLED}}{{#unless MONGO_ENABLED}}
 # Default in-memory persistence
 - descriptor: "pip-services-quotes:persistence:memory:default:1.0"
-{{/MONGO_ENABLED}}{{/FILE_ENABLED}}{{/MEMORY_ENABLED}}
+{{/unless}}{{/unless}}{{/unless}}
 
 # Default controller
 - descriptor: "pip-services-quotes:controller:default:default:1.0"
