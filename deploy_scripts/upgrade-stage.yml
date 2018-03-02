@@ -11,6 +11,6 @@
       replace:
         dest: /usr/kubernetes/pip-services-content/{{ COMPONENT }}-deploy.yml
         regexp: 'image:(.)*'
-        replace: 'image: pipdevs/{{ COMPONENT }}:{{ VERSION }}-{{ BUILD_NUMBER }}-rc'
+        replace: 'image: pipdevs/{{ COMPONENT }}:{{ VERSION }}-{{ BUILD_NUMBER }}'
     - name: Start rollout update
       raw: kubectl apply -f /usr/kubernetes/pip-services-content/{{ COMPONENT }}-deploy.yml --record
