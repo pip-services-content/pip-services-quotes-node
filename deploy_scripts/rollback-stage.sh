@@ -7,4 +7,6 @@ then
     exit 0
 fi
 
-ansible-playbook rollback-stage.yml -u ubuntu --private-key=~/.ssh/iqsadmin.pem -vvvv
+COMPONENT=$(grep -m1 name package.json | tr -d '\r' | awk -F: '{ print $2 }' | sed 's/[", ]//g')
+
+ansible-playbook deploy_scripts/rollback-stage.yml -u ubuntu -e COMPONENT=$COMPONENT --private-key=~/.ssh/iqsadmin.pem -vvvv
