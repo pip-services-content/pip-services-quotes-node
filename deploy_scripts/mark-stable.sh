@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo $TEST_PASSED
 if [ $TEST_PASSED == "false" ]
 then
     echo Test failed. This step skipped.
