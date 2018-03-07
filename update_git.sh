@@ -16,9 +16,12 @@ git checkout master
 git remote rm origin 
 git remote add origin "https://stee1:${GITHUB_API_KEY}@github.com/pip-services-content/${COMPONENT}.git"
 
-# Commit upgraded build number and push with new tag
+# Commit upgraded build number and push
 git add ./deploy_scripts/upgrade-stage.sh
 git commit -m "Travis build ${TRAVIS_BUILD_NUMBER} updated build number in stage deploy file [skip ci]" 
+git push origin master
+
+
+# Set git tag
 git tag ${TAG}
 git push --tags
-git push
