@@ -21,3 +21,4 @@ git add ./deploy_scripts/upgrade-stage.sh
 git commit -m "Travis build ${TRAVIS_BUILD_NUMBER} updated build number in stage deploy file [skip ci]" 
 git tag ${TAG}
 git push --tags
+git push
