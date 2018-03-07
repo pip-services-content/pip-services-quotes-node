@@ -17,15 +17,13 @@ TAG="v${VERSION}-${BUILD_NUMBER}"
 set -e
 set -o pipefail
 
-# Set tag on git repo
+# Configure git and set production tag on git repo
 git config --global user.email "krdima92@gmail.com" 
 git config --global user.name "stee1" 
 
 git remote rm origin 
 git remote add origin "https://stee1:${GITHUB_API_KEY}@github.com/pip-services-content/pip-services-quotes-node.git"
 
-#git config core.sshCommand "ssh -i ~/.ssh/id_rsa_stee1 -F /dev/null"
-git remote -v
 git tag $TAG
 git push --tags
 
