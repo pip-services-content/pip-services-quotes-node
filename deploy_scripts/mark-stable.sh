@@ -18,8 +18,9 @@ set -e
 set -o pipefail
 
 # Set tag on git repo
-#git tag $TAG
-#git push --tags
+git remote -v
+git tag $TAG
+git push --tags
 
 # Build docker image
 #docker build -f docker/Dockerfile -t ${IMAGE} .
