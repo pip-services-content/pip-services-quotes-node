@@ -10,10 +10,10 @@ IMAGE2="pipdevs/${COMPONENT}:latest"
 rm -rf ./node_modules
 rm -rf ./obj
 
-docker rmi $BUILD_IMAGE --force
-docker rmi $TEST_IMAGE --force
-docker rmi $IMAGE2 --force
-docker rmi $IMAGE1 --force
+docker rmi ${BUILD_IMAGE} --force
+docker rmi ${TEST_IMAGE} --force
+docker rmi ${IMAGE2} --force
+docker rmi ${IMAGE1} --force
 docker image prune --force
 
 docker ps -a | grep Exit | cut -d ' ' -f 1 | xargs docker rm
