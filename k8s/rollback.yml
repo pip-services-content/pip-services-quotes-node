@@ -1,6 +1,6 @@
 ---
-- name: Rollback prod {{ COMPONENT }}
-  hosts: prod
+- name: Rollback {{ HOST }} {{ COMPONENT }}
+  hosts: "{{ HOST }}"
   gather_facts: False
   become_user: root
   become_method: sudo

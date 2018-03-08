@@ -23,8 +23,8 @@
 - descriptor: "pip-services-quotes:persistence:mongodb:default:1.0"
   collection: {{MONGO_COLLECTION}}{{#unless MONGO_COLLECTION}}quotes{{/unless}}
   connection:
-    uri: {{MONGO_SERVICE_URI}}
-    host: {{MONGO_SERVICE_HOST}}{{#unless MONGO_SERVICE_HOST}}localhost{{/unless}}
+    uri: {{{MONGO_SERVICE_URI}}}
+    host: {{{MONGO_SERVICE_HOST}}}{{#unless MONGO_SERVICE_HOST}}localhost{{/unless}}
     port: {{MONGO_SERVICE_PORT}}{{#unless MONGO_SERVICE_PORT}}27017{{/unless}}
     database: {{MONGO_DB}}{{#unless MONGO_DB}}app{{/unless}}
   credential:

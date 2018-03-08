@@ -15,4 +15,3 @@ set -o pipefail
 cat docker/my_password.txt | docker login --username ${DOCKER_USER} --password-stdin
 docker push ${IMAGE1}
 docker push ${IMAGE2}
-

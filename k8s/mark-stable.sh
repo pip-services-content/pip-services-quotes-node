@@ -8,7 +8,7 @@ fi
 
 COMPONENT=$(grep -m1 name package.json | tr -d '\r' | awk -F: '{ print $2 }' | sed 's/[", ]//g')
 VERSION=$(grep -m1 version package.json | tr -d '\r' | awk -F: '{ print $2 }' | sed 's/[", ]//g')
-BUILD_NUMBER=$(grep BUILD_NUMBER deploy_scripts/upgrade-stage.sh | grep rc | sed 's/[^0-9]//g')
+BUILD_NUMBER=$(cat buildnumber | sed 's/[^0-9]//g')
 STAGE_IMAGE="pipdevs/${COMPONENT}:${VERSION}-${BUILD_NUMBER}-rc"
 PROD_IMAGE="pipdevs/${COMPONENT}:${VERSION}-${BUILD_NUMBER}"
 TAG="v${VERSION}-${BUILD_NUMBER}"

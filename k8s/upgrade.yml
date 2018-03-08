@@ -1,6 +1,6 @@
 ---
-- name: Upgrade stage {{ COMPONENT }}
-  hosts: stage
+- name: Upgrade {{ HOST }} {{ COMPONENT }}
+  hosts: "{{ HOST }}"
   gather_facts: False
   become_user: root
   become_method: sudo
