@@ -9,7 +9,7 @@ CONTAINER="${COMPONENT}"
 set -e
 set -o pipefail
 
-export IMAGE
+export TEST_IMAGE
 
 # Workaround to remove dangling images
 docker-compose -f ./docker/docker-compose.test.yml down
