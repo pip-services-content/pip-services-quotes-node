@@ -8,17 +8,15 @@ TAG="v${VERSION}-${TRAVIS_BUILD_NUMBER}-rc"
 # Configure git
 git config --global user.email "krdima92@gmail.com" 
 git config --global user.name "stee1" 
+#git config --global user.email "pipdevs@gmail.com" 
+#git config --global user.name "pipdeveloper" 
 
-git checkout master
+#git checkout master
 
 git remote rm origin 
 git remote add origin "https://stee1:${GITHUB_API_KEY}@github.com/pip-services-content/${COMPONENT}.git"
-
-# Commit upgraded build number and push
-#git add buildnumber
-#git commit -m "Travis build ${TRAVIS_BUILD_NUMBER} updated build number in stage deploy file [skip ci]" 
-#git push origin master
+#git remote add origin "https://pipdeveloper:${GITHUB_API_KEY}@github.com/pip-services-content/${COMPONENT}.git"
 
 # Set git tag
-git tag ${TAG}
+git tag ${TAG} -a -m "Generated tag from TravisCI for build #$TRAVIS_BUILD_NUMBER"
 git push --tags
