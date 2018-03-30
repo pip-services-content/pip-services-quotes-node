@@ -9,4 +9,4 @@ set -e
 set -o pipefail
 
 # Build docker image
-docker build -f docker/Dockerfile -t ${IMAGE1} .
+docker build -f docker/Dockerfile -t ${STAGE_IMAGE} .
