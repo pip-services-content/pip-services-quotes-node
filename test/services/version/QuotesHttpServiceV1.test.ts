@@ -74,7 +74,7 @@ suite('QuotesHttpServiceV1', ()=> {
         async.series([
         // Create one quote
             (callback) => {
-                rest.post('/quotes/create_quote',
+                rest.post('/v1/quotes/create_quote',
                     {
                         quote: QUOTE1
                     },
@@ -93,7 +93,7 @@ suite('QuotesHttpServiceV1', ()=> {
             },
         // Create another quote
             (callback) => {
-                rest.post('/quotes/create_quote', 
+                rest.post('/v1/quotes/create_quote', 
                     {
                         quote: QUOTE2
                     },
@@ -112,7 +112,7 @@ suite('QuotesHttpServiceV1', ()=> {
             },
         // Get all quotes
             (callback) => {
-                rest.post('/quotes/get_quotes',
+                rest.post('/v1/quotes/get_quotes',
                     {},
                     (err, req, res, page) => {
                         assert.isNull(err);
@@ -128,7 +128,7 @@ suite('QuotesHttpServiceV1', ()=> {
             (callback) => {
                 quote1.text = { en: 'Updated Content 1' };
 
-                rest.post('/quotes/update_quote',
+                rest.post('/v1/quotes/update_quote',
                     { 
                         quote: quote1
                     },
@@ -147,7 +147,7 @@ suite('QuotesHttpServiceV1', ()=> {
             },
         // Delete quote
             (callback) => {
-                rest.post('/quotes/delete_quote_by_id',
+                rest.post('/v1/quotes/delete_quote_by_id',
                     {
                         quote_id: quote1.id
                     },
@@ -162,7 +162,7 @@ suite('QuotesHttpServiceV1', ()=> {
             },
         // Try to get delete quote
             (callback) => {
-                rest.post('/quotes/get_quote_by_id',
+                rest.post('/v1/quotes/get_quote_by_id',
                     {
                         quote_id: quote1.id
                     },
