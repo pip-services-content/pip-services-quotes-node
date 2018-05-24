@@ -2,5 +2,5 @@
     "name":  "pip-services-quotes-node",
     "version":  "1.1.0",
     "registry": "pipdevs",
-    "build": 1
+    "build": 60
 }
