@@ -70,7 +70,7 @@ export class QuotesMemoryPersistence
         let exceptIds = filter.getAsObject('except_ids');
         
         // Process tags filter
-        if (tags) tags = TagsProcessor.compressTags(tags);
+        if (tags) tags = TagsProcessor.compressTags([tags]);
         
         // Process except ids filter
         if (_.isString(exceptIds))

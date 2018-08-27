@@ -61,7 +61,7 @@ export class QuotesController implements  IConfigurable, IReferenceable, IComman
 
         quote.status = quote.status || QuoteStatusV1.New;
         quote.tags = quote.tags || [];
-        quote.all_tags = TagsProcessor.extractHashTags(quote, 'text', 'author');
+        quote.all_tags = TagsProcessor.extractHashTags("#text#author");
 
         this._persistence.create(correlationId, quote, callback);
     }
@@ -71,7 +71,7 @@ export class QuotesController implements  IConfigurable, IReferenceable, IComman
 
         quote.status = quote.status || QuoteStatusV1.New;
         quote.tags = quote.tags || [];
-        quote.all_tags = TagsProcessor.extractHashTags(quote, 'text', 'author');
+        quote.all_tags = TagsProcessor.extractHashTags("#text#author");
 
         this._persistence.update(correlationId, quote, callback);
     }

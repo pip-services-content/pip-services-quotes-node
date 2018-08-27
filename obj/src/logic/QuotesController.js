@@ -33,13 +33,13 @@ class QuotesController {
     createQuote(correlationId, quote, callback) {
         quote.status = quote.status || QuoteStatusV1_1.QuoteStatusV1.New;
         quote.tags = quote.tags || [];
-        quote.all_tags = pip_services_commons_node_3.TagsProcessor.extractHashTags(quote, 'text', 'author');
+        quote.all_tags = pip_services_commons_node_3.TagsProcessor.extractHashTags("#text#author");
         this._persistence.create(correlationId, quote, callback);
     }
     updateQuote(correlationId, quote, callback) {
         quote.status = quote.status || QuoteStatusV1_1.QuoteStatusV1.New;
         quote.tags = quote.tags || [];
-        quote.all_tags = pip_services_commons_node_3.TagsProcessor.extractHashTags(quote, 'text', 'author');
+        quote.all_tags = pip_services_commons_node_3.TagsProcessor.extractHashTags("#text#author");
         this._persistence.update(correlationId, quote, callback);
     }
     deleteQuoteById(correlationId, id, callback) {

@@ -5,7 +5,7 @@ let assert = require('chai').assert;
 import { Descriptor } from 'pip-services-commons-node';
 import { ConfigParams } from 'pip-services-commons-node';
 import { References } from 'pip-services-commons-node';
-import { ConsoleLogger } from 'pip-services-commons-node';
+import { ConsoleLogger } from 'pip-services-components-node';
 
 import { QuoteV1 } from '../../src/data/version1/QuoteV1';
 import { QuoteStatusV1 } from '../../src/data/version1/QuoteStatusV1';
@@ -35,7 +35,7 @@ suite('QuotesLambdaFunction', ()=> {
 
     suiteSetup((done) => {
         let config = ConfigParams.fromTuples(
-            'logger.descriptor', 'pip-services-commons:logger:console:default:1.0',
+            'logger.descriptor', 'pip-services:logger:console:default:1.0',
             'persistence.descriptor', 'pip-services-quotes:persistence:memory:default:1.0',
             'controller.descriptor', 'pip-services-quotes:controller:default:default:1.0'
         );

@@ -55,7 +55,7 @@ class QuotesMemoryPersistence extends pip_services_data_node_1.IdentifiableMemor
         let exceptIds = filter.getAsObject('except_ids');
         // Process tags filter
         if (tags)
-            tags = pip_services_commons_node_2.TagsProcessor.compressTags(tags);
+            tags = pip_services_commons_node_2.TagsProcessor.compressTags([tags]);
         // Process except ids filter
         if (_.isString(exceptIds))
             exceptIds = exceptIds.split(',');
