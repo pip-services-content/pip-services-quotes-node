@@ -3,9 +3,9 @@ let async = require('async');
 let restify = require('restify');
 let assert = require('chai').assert;
 
-import { ConfigParams } from 'pip-services-commons-node';
-import { Descriptor } from 'pip-services-commons-node';
-import { References } from 'pip-services-commons-node';
+import { ConfigParams, MultiString } from 'pip-services3-commons-node';
+import { Descriptor } from 'pip-services3-commons-node';
+import { References } from 'pip-services3-commons-node';
 
 import { QuoteV1 } from '../../../src/data/version1/QuoteV1';
 import { QuoteStatusV1 } from '../../../src/data/version1/QuoteStatusV1';
@@ -21,16 +21,16 @@ let httpConfig = ConfigParams.fromTuples(
 
 let QUOTE1: QuoteV1 = {
     id: '1',
-    text: { en: 'Text 1' },
-    author: { en: 'Author 1' },
+    text: new MultiString({ en: 'Text 1' }),
+    author: new MultiString({ en: 'Author 1' }),
     status: QuoteStatusV1.Completed,
     tags: null,
     all_tags: null
 };
 let QUOTE2: QuoteV1 = {
     id: '2',
-    text: { en: 'Text 2' },
-    author: { en: 'Author 2' },
+    text: new MultiString({ en: 'Text 2' }),
+    author: new MultiString({ en: 'Author 2' }),
     status: QuoteStatusV1.Completed,
     tags: ['TAG 1'],
     all_tags: null
@@ -82,8 +82,8 @@ suite('QuotesHttpServiceV1', ()=> {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.author.en, QUOTE1.author.en);
-                        assert.equal(quote.text.en, QUOTE1.text.en);
+                        assert.equal(quote.author.en, QUOTE1.author.get('en'));
+                        assert.equal(quote.text.en, QUOTE1.text.get('en'));
 
                         quote1 = quote;
 
@@ -101,8 +101,8 @@ suite('QuotesHttpServiceV1', ()=> {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.author.en, QUOTE2.author.en);
-                        assert.equal(quote.text.en, QUOTE2.text.en);
+                        assert.equal(quote.author.en, QUOTE2.author.get('en'));
+                        assert.equal(quote.text.en, QUOTE2.text.get('en'));
 
                         quote2 = quote;
 
@@ -137,7 +137,7 @@ suite('QuotesHttpServiceV1', ()=> {
 
                         assert.isObject(quote);
                         assert.equal(quote.text.en, 'Updated Content 1');
-                        assert.equal(quote.author.en, QUOTE1.author.en);
+                        assert.equal(quote.author.en, QUOTE1.author.get('en'));
 
                         quote1 = quote;
 

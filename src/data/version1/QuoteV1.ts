@@ -1,8 +1,8 @@
 let _ = require('lodash');
 
-import { IdGenerator } from 'pip-services-commons-node';
-import { IStringIdentifiable } from 'pip-services-commons-node';
-import { MultiString } from 'pip-services-commons-node';
+import { IdGenerator } from 'pip-services3-commons-node';
+import { IStringIdentifiable } from 'pip-services3-commons-node';
+import { MultiString } from 'pip-services3-commons-node';
 import { QuoteStatusV1 } from './QuoteStatusV1';
 
 export class QuoteV1 implements IStringIdentifiable {

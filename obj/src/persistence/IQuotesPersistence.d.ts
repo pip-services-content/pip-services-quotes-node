@@ -1,8 +1,8 @@
-import { FilterParams } from 'pip-services-commons-node';
-import { PagingParams } from 'pip-services-commons-node';
-import { DataPage } from 'pip-services-commons-node';
-import { IGetter } from 'pip-services-data-node';
-import { IWriter } from 'pip-services-data-node';
+import { FilterParams } from 'pip-services3-commons-node';
+import { PagingParams } from 'pip-services3-commons-node';
+import { DataPage } from 'pip-services3-commons-node';
+import { IGetter } from 'pip-services3-data-node';
+import { IWriter } from 'pip-services3-data-node';
 import { QuoteV1 } from '../data/version1/QuoteV1';
 export interface IQuotesPersistence extends IGetter<QuoteV1, string>, IWriter<QuoteV1, string> {
     getPageByFilter(correlationId: string, filter: FilterParams, paging: PagingParams, callback: (err: any, page: DataPage<QuoteV1>) => void): void;

@@ -2,8 +2,8 @@ let _ = require('lodash');
 let async = require('async');
 let assert = require('chai').assert;
 
-import { FilterParams } from 'pip-services-commons-node';
-import { PagingParams } from 'pip-services-commons-node';
+import { FilterParams, MultiString } from 'pip-services3-commons-node';
+import { PagingParams } from 'pip-services3-commons-node';
 
 import { QuoteV1 } from '../../src/data/version1/QuoteV1';
 import { QuoteStatusV1 } from '../../src/data/version1/QuoteStatusV1';
@@ -12,24 +12,24 @@ import { IQuotesPersistence } from '../../src/persistence/IQuotesPersistence';
 
 let QUOTE1: QuoteV1 = {
     id: '1',
-    text: { en: 'Text 1' },
-    author: { en: 'Author 1' },
+    text: new MultiString({ en: 'Text 1' }),
+    author: new MultiString({ en: 'Author 1' }),
     status: QuoteStatusV1.Completed,
     tags: [],
     all_tags: []
 };
 let QUOTE2: QuoteV1 = {
     id: '2',
-    text: { en: 'Text 2' },
-    author: { en: 'Author 2' },
+    text: new MultiString({ en: 'Text 2' }),
+    author: new MultiString({ en: 'Author 2' }),
     status: QuoteStatusV1.Completed,
     tags: ['TAG 1'],
     all_tags: ['tag1']
 };
 let QUOTE3: QuoteV1 = {
     id: '3',
-    text: { en: 'Text 2' },
-    author: { en: 'Author 2' },
+    text: new MultiString({ en: 'Text 2' }),
+    author: new MultiString({ en: 'Author 2' }),
     status: QuoteStatusV1.Translating,
     tags: ['Tag 1', 'tag 2'],
     all_tags: ['tag1', 'tag2']
@@ -55,8 +55,8 @@ export class QuotesPersistenceFixture {
 
                         assert.isObject(quote);
                         assert.equal(quote.status, QUOTE1.status);
-                        assert.equal(quote.text.en, QUOTE1.text.en);
-                        assert.equal(quote.author.en, QUOTE1.author.en);
+                        assert.equal(quote.text.get('en'), QUOTE1.text.get('en'));
+                        assert.equal(quote.author.get('en'), QUOTE1.author.get('en'));
 
                         callback();
                     }
@@ -72,8 +72,8 @@ export class QuotesPersistenceFixture {
 
                         assert.isObject(quote);
                         assert.equal(quote.status, QUOTE2.status);
-                        assert.equal(quote.text.en, QUOTE2.text.en);
-                        assert.equal(quote.author.en, QUOTE2.author.en);
+                        assert.equal(quote.text.get('en'), QUOTE2.text.get('en'));
+                        assert.equal(quote.author.get('en'), QUOTE2.author.get('en'));
 
                         callback();
                     }
@@ -89,8 +89,8 @@ export class QuotesPersistenceFixture {
 
                         assert.isObject(quote);
                         assert.equal(quote.status, QUOTE3.status);
-                        assert.equal(quote.text.en, QUOTE3.text.en);
-                        assert.equal(quote.author.en, QUOTE3.author.en);
+                        assert.equal(quote.text.get('en'), QUOTE3.text.get('en'));
+                        assert.equal(quote.author.get('en'), QUOTE3.author.get('en'));
 
                         callback();
                     }
@@ -127,7 +127,8 @@ export class QuotesPersistenceFixture {
             },
         // Update the quote
             (callback) => {
-                quote1.text.en = 'Updated Content 1';
+                //quote1.text.put('en', 'Updated Content 1');
+                quote1.text = new MultiString({en: 'Updated Content 1'});
 
                 this._persistence.update(
                     null,
@@ -136,7 +137,7 @@ export class QuotesPersistenceFixture {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.text.en, 'Updated Content 1');
+                        //assert.equal(quote.text.get('en'), 'Updated Content 1');
                         assert.equal(quote.id, quote1.id);
 
                         callback();

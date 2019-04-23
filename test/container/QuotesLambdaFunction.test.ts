@@ -2,10 +2,10 @@ let _ = require('lodash');
 let async = require('async');
 let assert = require('chai').assert;
 
-import { Descriptor } from 'pip-services-commons-node';
-import { ConfigParams } from 'pip-services-commons-node';
-import { References } from 'pip-services-commons-node';
-import { ConsoleLogger } from 'pip-services-components-node';
+import { Descriptor, MultiString } from 'pip-services3-commons-node';
+import { ConfigParams } from 'pip-services3-commons-node';
+import { References } from 'pip-services3-commons-node';
+import { ConsoleLogger } from 'pip-services3-components-node';
 
 import { QuoteV1 } from '../../src/data/version1/QuoteV1';
 import { QuoteStatusV1 } from '../../src/data/version1/QuoteStatusV1';
@@ -15,16 +15,16 @@ import { QuotesLambdaFunction } from '../../src/container/QuotesLambdaFunction';
 
 let QUOTE1: QuoteV1 = {
     id: '1',
-    text: { en: 'Text 1' },
-    author: { en: 'Author 1' },
+    text: new MultiString({ en: 'Text 1' }),
+    author: new MultiString({ en: 'Author 1' }),
     status: QuoteStatusV1.Completed,
     tags: null,
     all_tags: null
 };
 let QUOTE2: QuoteV1 = {
     id: '2',
-    text: { en: 'Text 2' },
-    author: { en: 'Author 2' },
+    text: new MultiString({ en: 'Text 2' }),
+    author: new MultiString({ en: 'Author 2' }),
     status: QuoteStatusV1.Completed,
     tags: ['TAG 1'],
     all_tags: null
@@ -65,8 +65,8 @@ suite('QuotesLambdaFunction', ()=> {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.author.en, QUOTE1.author.en);
-                        assert.equal(quote.text.en, QUOTE1.text.en);
+                        assert.equal(quote.author.en, QUOTE1.author.get('en'));
+                        assert.equal(quote.text.en, QUOTE1.text.get('en'));
 
                         quote1 = quote;
 
@@ -86,8 +86,8 @@ suite('QuotesLambdaFunction', ()=> {
                         assert.isNull(err);
 
                         assert.isObject(quote);
-                        assert.equal(quote.author.en, QUOTE2.author.en);
-                        assert.equal(quote.text.en, QUOTE2.text.en);
+                        assert.equal(quote.author.en, QUOTE2.author.get('en'));
+                        assert.equal(quote.text.en, QUOTE2.text.get('en'));
 
                         quote2 = quote;
 
@@ -127,7 +127,7 @@ suite('QuotesLambdaFunction', ()=> {
 
                         assert.isObject(quote);
                         assert.equal(quote.text.en, 'Updated Content 1');
-                        assert.equal(quote.author.en, QUOTE1.author.en);
+                        assert.equal(quote.author.en, QUOTE1.author.get('en'));
 
                         quote1 = quote;
 
