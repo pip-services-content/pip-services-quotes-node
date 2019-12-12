@@ -17,11 +17,11 @@ class QuotesServiceFactory extends pip_services3_components_node_1.Factory {
         this.registerAsType(QuotesServiceFactory.HttpServiceDescriptor, QuotesHttpServiceV1_1.QuotesHttpServiceV1);
     }
 }
+exports.QuotesServiceFactory = QuotesServiceFactory;
 QuotesServiceFactory.Descriptor = new pip_services3_commons_node_1.Descriptor("pip-services-quotes", "factory", "default", "default", "1.0");
 QuotesServiceFactory.MemoryPersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-quotes", "persistence", "memory", "*", "1.0");
 QuotesServiceFactory.FilePersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-quotes", "persistence", "file", "*", "1.0");
 QuotesServiceFactory.MongoDbPersistenceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-quotes", "persistence", "mongodb", "*", "1.0");
 QuotesServiceFactory.ControllerDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-quotes", "controller", "default", "*", "1.0");
 QuotesServiceFactory.HttpServiceDescriptor = new pip_services3_commons_node_1.Descriptor("pip-services-quotes", "service", "http", "*", "1.0");
-exports.QuotesServiceFactory = QuotesServiceFactory;
 //# sourceMappingURL=QuotesServiceFactory.js.map

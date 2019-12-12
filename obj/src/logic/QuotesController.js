@@ -46,6 +46,6 @@ class QuotesController {
         this._persistence.deleteById(correlationId, id, callback);
     }
 }
-QuotesController._defaultConfig = pip_services3_commons_node_1.ConfigParams.fromTuples('dependencies.persistence', 'pip-services-quotes:persistence:*:*:1.0');
 exports.QuotesController = QuotesController;
+QuotesController._defaultConfig = pip_services3_commons_node_1.ConfigParams.fromTuples('dependencies.persistence', 'pip-services-quotes:persistence:*:*:1.0');
 //# sourceMappingURL=QuotesController.js.map

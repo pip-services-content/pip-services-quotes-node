@@ -4,16 +4,15 @@ import { FilterParams } from 'pip-services3-commons-node';
 import { PagingParams } from 'pip-services3-commons-node';
 import { DataPage } from 'pip-services3-commons-node';
 import { TagsProcessor } from 'pip-services3-commons-node';
-import { IdentifiableMongoosePersistence } from 'pip-services3-mongoose-node';
+import { IdentifiableMongoDbPersistence } from 'pip-services3-mongodb-node';
 
 import { QuoteV1 } from '../data/version1/QuoteV1';
 import { IQuotesPersistence } from './IQuotesPersistence';
-import { QuotesMongooseSchema } from './QuotesMongooseSchema';
 
-export class QuotesMongoDbPersistence extends IdentifiableMongoosePersistence<QuoteV1, string> implements IQuotesPersistence {
+export class QuotesMongoDbPersistence extends IdentifiableMongoDbPersistence<QuoteV1, string> implements IQuotesPersistence {
 
     constructor() {
-        super('quotes', QuotesMongooseSchema());
+        super('quotes');
     }
     
     private composeFilter(filter: any) {
